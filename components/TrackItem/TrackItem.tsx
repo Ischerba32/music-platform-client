@@ -16,7 +16,7 @@ const TrackItem = ({ track, active = false}: ITrackItemProps): JSX.Element => {
 
   return (
     <Card className={styles.track} onClick={() => router.push('/tracks/' + track._id)}>
-      <IconButton>
+      <IconButton onClick={e => e.stopPropagation()} >
         {active
         ? <Pause />
         : <PlayArrow/>
@@ -28,7 +28,7 @@ const TrackItem = ({ track, active = false}: ITrackItemProps): JSX.Element => {
         <div style={{fontSize: 12, color: 'gray'}}>{track.artist}</div>
       </Grid>
       {active && <div>02:40 / 03:22</div>}
-      <IconButton style={{marginLeft: 'auto'}}>
+      <IconButton onClick={e => e.stopPropagation()} style={{marginLeft: 'auto'}}>
         <Delete />
       </IconButton>
     </Card>
