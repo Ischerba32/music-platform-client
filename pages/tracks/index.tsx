@@ -2,6 +2,7 @@ import MainLayout from '../../layout/MainLayout';
 import { Box, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ITrack } from '../../types/track';
+import TrackList from '../../components/TrackList/TrackList';
 
 const Tracks = () => {
   const router = useRouter();
@@ -52,6 +53,7 @@ const Tracks = () => {
               </Button>
             </Grid>
           </Box>
+          <TrackList tracks={tracks} />
         </Card>
       </Grid>
     </MainLayout>
