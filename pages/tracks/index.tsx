@@ -3,6 +3,7 @@ import { Box, Button, Card, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ITrack } from '../../types/track';
 import TrackList from '../../components/TrackList/TrackList';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const Tracks = () => {
   const router = useRouter();
