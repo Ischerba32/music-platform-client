@@ -10,8 +10,8 @@ const Home: NextPage = () => {
     <>
       <MainLayout>
         <div className={styles.center}>
-          <h1>Добро пожаловать</h1>
-          <h3>Здесь собраны лучшие треки</h3>
+          <h1>Placify</h1>
+          <h3>Like a Spotify, but a Placify</h3>
         </div>
       </MainLayout>
     </>

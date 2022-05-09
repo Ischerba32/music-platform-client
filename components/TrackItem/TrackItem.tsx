@@ -1,4 +1,4 @@
-import { Delete, Pause, PlayArrow } from '@mui/icons-material';
+import { Info, Pause, PlayArrow } from '@mui/icons-material';
 import { Card, Grid, IconButton } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -24,7 +24,7 @@ const TrackItem = ({ track, active = false}: ITrackItemProps): JSX.Element => {
   }
 
   return (
-    <Card className={styles.track} onClick={() => router.push('/tracks/' + track._id)}>
+    <Card className={styles.track} >
       <IconButton onClick={play} >
         {active
         ? <Pause />
@@ -37,8 +37,8 @@ const TrackItem = ({ track, active = false}: ITrackItemProps): JSX.Element => {
         <div style={{fontSize: 12, color: 'gray'}}>{track.artist}</div>
       </Grid>
       {active && <div>02:40 / 03:22</div>}
-      <IconButton onClick={e => e.stopPropagation()} style={{marginLeft: 'auto'}}>
-        <Delete />
+      <IconButton onClick={() => router.push('/tracks/' + track._id)} style={{marginLeft: 'auto'}}>
+        <Info />
       </IconButton>
     </Card>
   )

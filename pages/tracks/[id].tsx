@@ -34,7 +34,10 @@ const TrackPage = ({serverTrack}: ITrackPageProps) => {
   }
 
   return (
-    <MainLayout>
+    <MainLayout
+      title={`${track.artist} - ${track.name} | Placify`}
+      keywords={`${track.artist}, ${track.name}`}
+    >
       <Button
         variant={'outlined'}
         style={{fontSize: 18}}
@@ -52,7 +55,7 @@ const TrackPage = ({serverTrack}: ITrackPageProps) => {
         <div style={{marginLeft: 30}}>
           <h1>{track.name}</h1>
           <h1>{track.artist}</h1>
-          <h1>{track.listens}</h1>
+          <h4>Listens: {track.listens}</h1>
         </div>
       </Grid>
       <h1>Lyrics</h1>

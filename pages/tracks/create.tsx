@@ -38,7 +38,7 @@ const Create = () => {
   }
 
   return (
-    <MainLayout>
+    <MainLayout title='Upload - Placify'>
       <StepWrapper activeStep={activeStep}>
         {activeStep === 0 &&
           <Grid

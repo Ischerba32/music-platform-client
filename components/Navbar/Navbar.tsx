@@ -23,17 +23,13 @@ const drawerWidth = 240;
 
 const menuItems = [
   {
-    text: 'Главная',
+    text: 'Home',
     href: '/'
   },
   {
-    text: 'Треки',
+    text: 'Library',
     href: '/tracks'
-  },
-  {
-    text: 'Альбомы',
-    href: '/albums'
-  },
+  }
 
 ]
 
@@ -114,7 +110,7 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            Placify
           </Typography>
         </Toolbar>
       </AppBar>
