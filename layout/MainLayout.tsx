@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { FC, ReactNode } from "react"
 import Navbar from "../components/Navbar/Navbar"
+import Player from "../components/Player/Player";
 
 export interface IMainLayoutProps {
   children: ReactNode;
@@ -17,6 +18,7 @@ const MainLayout = ({children}: IMainLayoutProps): JSX.Element => {
       >
         {children}
       </Container>
+      <Player />
     </>
   )
 }
