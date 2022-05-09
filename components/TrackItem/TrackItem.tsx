@@ -31,7 +31,7 @@ const TrackItem = ({ track, active = false}: ITrackItemProps): JSX.Element => {
         : <PlayArrow/>
         }
       </IconButton>
-      <Image src={track.picture} width={70} height={70} alt={`${track.name} pic`} />
+      <Image src={'http://localhost:5000/'+ track.picture} width={70} height={70} alt={`${track.name} pic`} />
       <Grid container direction='column' style={{width: 200, margin: '0 20px'}}>
         <div>{track.name}</div>
         <div style={{fontSize: 12, color: 'gray'}}>{track.artist}</div>

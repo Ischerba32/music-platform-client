@@ -1,7 +1,10 @@
 import { Button, Grid, TextField } from '@mui/material'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import FileUpload from '../../components/FileUpload/FileUpload'
 import StepWrapper from '../../components/StepWrapper/StepWrapper'
+import { useInput } from '../../hooks/useInput'
 import MainLayout from '../../layout/MainLayout'
 
 const Create = () => {
@@ -9,8 +12,26 @@ const Create = () => {
   const [picture, setPicture] = useState(null);
   const [audio, setAudio] = useState(null);
 
+  const router = useRouter()
+
+  const name = useInput('');
+  const artist = useInput('');
+  const text = useInput('');
+
   const nextStep = () => {
     if (activeStep !== 2) setActiveStep(prev => prev + 1);
+    else {
+      const formData = new FormData();
+      formData.append('name', name.value);
+      formData.append('text', text.value);
+      formData.append('artist', artist.value);
+      formData.append('audio', audio);
+      formData.append('picture', picture);
+
+      axios.post('http://localhost:5000/tracks', formData)
+      .then(response => router.push('/tracks'))
+      .catch(error => console.error(error))
+    }
   }
   const prevStep = () => {
     setActiveStep(prev => prev - 1);
@@ -27,15 +48,18 @@ const Create = () => {
 
           >
             <TextField
+              {...name}
               label="Title"
               style={{marginTop: 15}}
 
             />
             <TextField
+              {...artist}
               label="Artist"
               style={{marginTop: 15}}
             />
             <TextField
+              {...text}
               label="Lyrics"
               style={{marginTop: 15}}
               multiline
