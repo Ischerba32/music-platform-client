@@ -10,7 +10,7 @@ const TrackProgress = ({left, right, onChange}: ITrackProgressProps): JSX.Elemen
   return (
     <div style={{display: 'flex'}}>
       <input type="range"
-        min={left}
+        min={0}
         max={right}
         value={left}
         onChange={onChange}
