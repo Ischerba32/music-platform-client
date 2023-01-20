@@ -3,7 +3,7 @@ import React, { ChangeEvent } from 'react'
 export interface ITrackProgressProps {
   left: number;
   right: number;
-  onChange: (e: ChangeEvent) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TrackProgress = ({left, right, onChange}: ITrackProgressProps): JSX.Element => {

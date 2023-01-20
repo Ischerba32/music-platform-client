@@ -8,7 +8,6 @@ import { useInput } from '../../hooks/useInput'
 import MainLayout from '../../layout/MainLayout'
 import { ITrack } from '../../types/track'
 
-
 export interface ITrackPageProps {
   serverTrack: ITrack;
 }
@@ -55,7 +54,7 @@ const TrackPage = ({serverTrack}: ITrackPageProps) => {
         <div style={{marginLeft: 30}}>
           <h1>{track.name}</h1>
           <h1>{track.artist}</h1>
-          <h4>Listens: {track.listens}</h1>
+          <h4>Listens: {track.listens}</h4>
         </div>
       </Grid>
       <h1>Lyrics</h1>

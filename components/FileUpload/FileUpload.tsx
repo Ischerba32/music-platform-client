@@ -15,7 +15,15 @@ const FileUpload = ({setFile, accept, children}: IFileUploadProps): JSX.Element 
   }
 
   return (
-    <div onClick={() => ref.current?.click()}>
+    <div
+      onClick={() => ref.current?.click()}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+      }}
+    >
       <input
         type="file"
         accept={accept}

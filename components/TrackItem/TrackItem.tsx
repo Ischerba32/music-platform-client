@@ -2,11 +2,11 @@ import { Info, Pause, PlayArrow } from '@mui/icons-material';
 import { Card, Grid, IconButton } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, useContext } from 'react'
 import { useActions } from '../../hooks/useActions';
 import { ITrack } from '../../types/track'
 import styles from './TrackItem.module.scss';
-
+import { AudioContext } from '../../context/audioContext';
 export interface ITrackItemProps {
   track: ITrack;
   active?: boolean;
@@ -14,7 +14,7 @@ export interface ITrackItemProps {
 
 const TrackItem = ({ track, active = false}: ITrackItemProps): JSX.Element => {
   const router = useRouter();
-
+  // const audio = useContext(AudioContext);
   const { playTrack, pauseTrack, setActiveTrack } = useActions()
 
   const play = (e: SyntheticEvent) => {

@@ -12,7 +12,7 @@ const Tracks = () => {
   const router = useRouter();
   const { tracks, error } = useTypedSelector(state => state.tracks);
   const [query, setQuery] = useState<string>('');
-  const [timer, setTimer] = useState(null);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   const dispatch = useDispatch() as NextThunkDispatch;
 
@@ -23,7 +23,7 @@ const Tracks = () => {
     }
 
     setTimer(setTimeout(async () => {
-      await dispatch(await searchTracks(e.target.value));
+      await dispatch(searchTracks(e.target.value));
     }, 1000))
   }
 
@@ -47,11 +47,14 @@ const Tracks = () => {
               </Button>
             </Grid>
           </Box>
-          <TextField
-            fullWidth
-            value={query}
-            onChange={search}
-          />
+          <Grid container justifyContent='center'>
+            <TextField
+              label='Search'
+              fullWidth
+              value={query}
+              onChange={search}
+            />
+          </Grid>
           <TrackList tracks={tracks} />
         </Card>
       </Grid>
