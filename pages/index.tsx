@@ -1,21 +1,30 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import Navbar from '../components/Navbar/Navbar'
-import MainLayout from '../layout/MainLayout'
-import styles from '../styles/Home.module.scss'
+import React from 'react';
+// import {Button} from "@material-ui/core";
+import Navbar from "../components/Navbar";
+import MainLayout from "../layouts/MainLayout";
 
-const Home: NextPage = () => {
-  return (
-    <>
-      <MainLayout>
-        <div className={styles.center}>
-          <h1>Placify</h1>
-          <h3>Like a Spotify, but a Placify</h3>
-        </div>
-      </MainLayout>
-    </>
-  )
-}
+const Index = () => {
+    return (
+        <>
+            <MainLayout>
+                <div className="center">
+                    <h1>Добро пожаловать!</h1>
+                    <h3>Здесь собраны лучшие треки!</h3>
+                </div>
+            </MainLayout>
 
-export default Home
+            <style jsx>
+                {`
+                    .center {
+                        margin-top: 150px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                `}
+            </style>
+        </>
+    );
+};
+
+export default Index;

@@ -1,54 +1,49 @@
-import { ITrack } from "./track";
+import {ITrack} from "./track";
 
-export interface IPlayerState {
-  active: null | ITrack;
-  volume: number;
-  duration: number;
-  currentTime: number;
-  pause: boolean;
+export interface PlayerState {
+    active: null | ITrack;
+    volume: number;
+    currentTime: number;
+    pause: boolean;
+    collapsed: boolean;
 }
 
 export enum PlayerActionTypes {
-  PLAY = 'PLAY',
-  PAUSE = 'PAUSE',
-  SET_ACTIVE = 'SET_ACTIVE',
-  SET_DURATION = 'SET_DURATION',
-  SET_CURRENT_TIME = 'SET_CURRENT_TIME',
-  SET_VOLUME = 'SET_VOLUME'
+    PLAY = "PLAY",
+    PAUSE = "PAUSE",
+    SET_ACTIVE = "SET_ACTIVE",
+    SET_CURRENT_TIME = "SET_CURRENT_TIME",
+    SET_VOLUME = "SET_VOLUME",
+    SET_COLLAPSED = "SET_COLLAPSED",
 }
 
-interface IPlayAction {
-  type: PlayerActionTypes.PLAY;
+interface PlayAction {
+    type: PlayerActionTypes.PLAY
 }
-
-interface IPauseAction {
-  type: PlayerActionTypes.PAUSE;
+interface PauseAction {
+    type: PlayerActionTypes.PAUSE
 }
-
-interface ISetActiveAction {
-  type: PlayerActionTypes.SET_ACTIVE;
-  payload: ITrack;
+interface SetActiveAction {
+    type: PlayerActionTypes.SET_ACTIVE,
+    payload: ITrack;
 }
-
-interface ISetDurationAction {
-  type: PlayerActionTypes.SET_DURATION;
-  payload: number;
+interface SetVolumeAction {
+    type: PlayerActionTypes.SET_VOLUME,
+    payload: number;
 }
-
-interface ISetCurrentTimeAction {
-  type: PlayerActionTypes.SET_CURRENT_TIME;
-  payload: number;
+interface SetCurrentTimeAction {
+    type: PlayerActionTypes.SET_CURRENT_TIME,
+    payload: number;
 }
-
-interface ISetVolumeAction {
-  type: PlayerActionTypes.SET_VOLUME;
-  payload: number;
+interface SetCollapsedAction {
+    type: PlayerActionTypes.SET_COLLAPSED,
+    payload: boolean;
 }
 
 export type PlayerAction =
-  IPlayAction |
-  IPauseAction |
-  ISetActiveAction |
-  ISetDurationAction |
-  ISetCurrentTimeAction |
-  ISetVolumeAction
+    PlayAction
+    | PauseAction
+    | SetActiveAction
+    | SetVolumeAction
+    | SetCurrentTimeAction
+    | SetCollapsedAction

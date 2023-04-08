@@ -1,0 +1,26 @@
+.player {
+    background-color: lightgray;
+    transition: 1s all ease;
+    align-items: center;
+    padding: 0 10px;
+    position: fixed;
+    display: flex;
+    height: 60px;
+    width: 100%;
+    bottom: 0;
+
+    &_collapsed {
+        transform: translateY(100%);
+    }
+}
+
+.track-picture {
+    max-height: calc(100% - 10px);
+    max-width: calc(100% - 10px);
+}
+
+.collapse-btn {
+    position: absolute;
+    right: 10px;
+    top: -75%;
+}
