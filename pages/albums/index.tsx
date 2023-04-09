@@ -1,18 +1,14 @@
-import React from "react";
+import { useRouter } from "next/router";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 import MainLayout from "../../layouts/MainLayout";
 import { Box, Button, Card, Grid } from "@mui/material";
-import { useRouter } from "next/router";
-import { ITrack } from "../../types/track";
-import TrackList from "../../components/TrackList";
-import Player from "../../components/Player";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActions } from "../../hooks/useActions";
 import { NextThunkDispatch, wrapper } from "../../store";
-import { fetchTracks } from "../../store/actions-creators/track";
+import { fetchAlbums } from "../../store/actions-creators/album";
+import Albums from "../../components/Albums";
 
 const Index = () => {
   const router = useRouter();
-  const { tracks, error } = useTypedSelector((state) => state.track);
+  const { albums, error } = useTypedSelector((state) => state.album);
 
   if (error) {
     return (
@@ -23,33 +19,33 @@ const Index = () => {
   }
 
   return (
-    <MainLayout title={"Список треков - музыкальная площадка"}>
+    <MainLayout title={"Список альбомов - музыкальная площадка"}>
       <Grid container justifyContent="center">
         <Card style={{ width: 900 }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
               <h1>Список треков</h1>
-              <Button onClick={() => router.push("/tracks/create")}>
-                Загрузить
+              <Button onClick={() => router.push("/albums/create")}>
+                Создать
               </Button>
             </Grid>
           </Box>
-          <TrackList tracks={tracks} />
+          <Albums albums={albums} />
         </Card>
       </Grid>
     </MainLayout>
-  );
-};
+  )
+}
 
 export default Index;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
     const dispatch = store.dispatch as NextThunkDispatch;
-    await dispatch(await fetchTracks());
+    await dispatch(await fetchAlbums());
 
     return {
-      props: {},
-    };
+      props: {}
+    }
   }
-);
+)

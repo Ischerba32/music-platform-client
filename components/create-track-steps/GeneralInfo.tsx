@@ -5,7 +5,7 @@ import { Grid, TextField } from '@mui/material';
 interface GeneralInfoProps {
     name: UseInputReturnType;
     artist: UseInputReturnType;
-    text: UseInputReturnType;
+    text?: UseInputReturnType;
 }
 
 const GeneralInfo: React.FC<GeneralInfoProps> = ({name, artist, text}) => {
