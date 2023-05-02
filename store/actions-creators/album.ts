@@ -11,7 +11,7 @@ export const fetchAlbums = () => {
     catch (e) {
       dispatch({
         type: AlbumActionTypes.FETCH_ALBUMS_ERROR,
-        payload: 'Произошла ошибка при загрузке альбомов'})
+        payload: e.message})
     }
   }
 }
