@@ -9,15 +9,17 @@ import {useActions} from "../hooks/useActions";
 import TrackVolume from './TrackVolume';
 import { Button, Grid, IconButton } from '@mui/material';
 import { Pause, PlayArrow, VolumeUp, ExpandMore, ExpandLess } from '@mui/icons-material';
+import { playerStore, tracksStore } from '../store/store';
+import { observer } from 'mobx-react-lite';
 // import RevealIcon from '@material-ui/icons/ArrowDropUp';
 // import CollapseIcon from '@material-ui/icons/ArrowDropDown';
 
 let audio;
 
 const Player = () => {
-    const {pause, volume, active, currentTime, collapsed} = useTypedSelector(state => state.player)
-    const {tracks} = useTypedSelector(state => state.track)
-    const {pauseTrack, playTrack, setVolume, setCurrentTime, setActiveTrack, setCollapsed} = useActions()
+    // const {pause, volume, active, currentTime, collapsed} = useTypedSelector(state => state.player)
+    // const {tracks} = useTypedSelector(state => state.track)
+    // const {pauseTrack, playTrack, setVolume, setCurrentTime, setActiveTrack, setCollapsed} = useActions()
 
     useEffect(() => {
         if (!audio) {
@@ -25,75 +27,79 @@ const Player = () => {
         } else {
             setAudio()
         }
-    }, [active])
+    }, [playerStore.active])
 
     useEffect(() => {
-        if (pause) {
+        if (playerStore.pause) {
             audio.pause()
         } else {
             audio.play()
         }
-    }, [active, pause]);
+    }, [playerStore.active, playerStore.pause]);
 
     const setAudio = () => {
-        if (active) {
+        if (playerStore.active) {
             audio.pause()
-            audio.src = 'http://localhost:5000/' + active.audio
-            audio.volume = volume / 100
-            audio.currentTime = currentTime
+            audio.src = 'http://localhost:5000/' + playerStore.active.audio
+            audio.volume = playerStore.volume / 100
+            audio.currentTime = playerStore.currentTime
             audio.ontimeupdate = () => {
-                setCurrentTime(Math.ceil(audio.currentTime))
+                // setCurrentTime(Math.ceil(audio.currentTime))
+                playerStore.currentTime = Math.ceil(audio.currentTime);
             }
             audio.onended = () => {
-                let nextTrackIndex = tracks.indexOf(active) + 1
+                let nextTrackIndex = tracksStore.tracks.indexOf(playerStore.active) + 1
 
-                nextTrackIndex = tracks[nextTrackIndex] ? nextTrackIndex : 0
+                nextTrackIndex = tracksStore.tracks[nextTrackIndex] ? nextTrackIndex : 0
 
-                setActiveTrack(tracks[nextTrackIndex])
+                // setActiveTrack(tracks[nextTrackIndex])
+                playerStore.active = tracksStore.tracks[nextTrackIndex];
             }
         }
     }
 
     const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
         audio.volume = Number(e.target.value) / 100
-        setVolume(Number(e.target.value))
+        // setVolume(Number(e.target.value));
+        playerStore.volume = Number(e.target.value)
     }
     const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
         audio.currentTime = Number(e.target.value)
-        setCurrentTime(Number(e.target.value))
+        // setCurrentTime(Number(e.target.value))
+        playerStore.currentTime = Number(e.target.value);
     }
 
     return (
-        <div className={clsx({[styles.player]: true, [styles.player_collapsed]: collapsed})}>
+        <div className={clsx({[styles.player]: true, [styles.player_collapsed]: playerStore.collapsed})}>
             <Button
                 className={styles['collapse-btn']}
                 variant="contained"
-                onClick={() => setCollapsed(!collapsed)}
+                onClick={() => playerStore.collapsed = !playerStore.collapsed}
             >
-                {collapsed
-                    ? <ExpandMore />
-                    : <ExpandLess />
+                {playerStore.collapsed
+                    ? <ExpandLess />
+                    : <ExpandMore />
                 }
             </Button>
 
-            <IconButton onClick={() => pause ? playTrack() : pauseTrack()}>
-                {pause
+            <IconButton onClick={() => playerStore.pause ? playerStore.play() : playerStore.pause = true}>
+                {playerStore.pause
                     ? <PlayArrow/>
                     : <Pause/>
                 }
             </IconButton>
 
-            <img className={styles['track-picture']} src={'http://localhost:5000/' + active?.picture} />
+            <img className={styles['track-picture']} src={'http://localhost:5000/' + playerStore.active?.picture} />
 
             <Grid container direction="column" style={{width: 200, margin: '0 20px 0 10px'}}>
-                <div>{active?.name || 'track'}</div>
-                <div style={{fontSize: 12, color: 'gray'}}>{active?.artist || 'artist'}</div>
+                <div>{playerStore.active?.name || 'track'}</div>
+                <div style={{fontSize: 12, color: 'gray'}}>{playerStore.active?.artist || 'artist'}</div>
             </Grid>
-            <TrackProgress left={currentTime} right={active?.duration || 0} onChange={changeCurrentTime}/>
+            <TrackProgress left={playerStore.currentTime} right={playerStore.active?.duration || 0} onChange={changeCurrentTime}/>
             <VolumeUp style={{marginLeft: 'auto'}}/>
-            <TrackVolume left={volume} right={100} onChange={changeVolume}/>
+            <TrackVolume left={playerStore.volume} right={100} onChange={changeVolume}/>
         </div>
     );
 };
 
-export default Player;
+export default observer(Player);
