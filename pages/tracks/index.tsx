@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { Box, Button, Card, Grid } from "@mui/material";
 import { useRouter } from "next/router";
@@ -9,26 +9,36 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { NextThunkDispatch, wrapper } from "../../store";
 import { fetchTracks } from "../../store/actions-creators/track";
-import { tracksStore } from "../../store/store";
+import { tracksStore, userStore } from "../../store/store";
 import { observer } from "mobx-react-lite";
 import { StoreContext } from "../../context/storeContext";
 import { toJS } from "mobx";
 
 const Index = () => {
   const router = useRouter();
-  const { tracks, error } = useTypedSelector((state) => state.track);
+  // const { tracks: Storedtracks, error } = useTypedSelector((state) => state.track);
 
-  const { tracksStore } = useContext(StoreContext);
+  // const { tracksStore } = useContext(StoreContext);
 
   console.log(toJS(tracksStore.tracks));
 
-  if (error) {
-    return (
-      <MainLayout>
-        <h1>{error}</h1>
-      </MainLayout>
-    );
-  }
+  // console.log('tracks: ', tracks);
+
+  useEffect(() => {
+    tracksStore.fetchTracks().then(response => console.log(response))
+  }, [])
+
+  useEffect(() => {
+    userStore.checkAuth().then(response => !response && router.push('/signIn'));
+  }, [router])
+
+  // if (error) {
+  //   return (
+  //     <MainLayout>
+  //       <h1>{error}</h1>
+  //     </MainLayout>
+  //   );
+  // }
 
   return (
     <MainLayout title={"Список треков - музыкальная площадка"}>
@@ -42,7 +52,7 @@ const Index = () => {
               </Button>
             </Grid>
           </Box>
-          <TrackList tracks={tracks} />
+          <TrackList tracks={tracksStore.musicTracks} />
         </Card>
       </Grid>
     </MainLayout>
@@ -51,14 +61,26 @@ const Index = () => {
 
 export default observer(Index);
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    const dispatch = store.dispatch as NextThunkDispatch;
-    await dispatch(await fetchTracks());
-    await tracksStore.fetchTracks();
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async () => {
+//     const dispatch = store.dispatch as NextThunkDispatch;
+//     // await dispatch(await fetchTracks());
+//     const tracks = await tracksStore.fetchTracks();
 
-    return {
-      props: {},
-    };
-  }
-);
+//     return {
+//       props: {
+//         tracks
+//       },
+//     };
+//   }
+// );
+
+
+// export const getServerSideProps = async ({ req }) => {
+//   // const tracks = await tracksStore.fetchTracks();
+//   console.log(req.cookie);
+//   // const result = JSON.parse(JSON.stringify(tracks));
+//   return {
+//     props: {},
+//   }
+// }

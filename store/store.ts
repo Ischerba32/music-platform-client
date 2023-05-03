@@ -98,18 +98,38 @@ export class TracksStore {
     this.errorMessage = error;
   }
 
-  async fetchTracks() {
+  async fetchTracks(): Promise<any> {
     try {
-      const response = await $api.get('http://localhost:5000/tracks')
-      console.log('response: ', response.data);
+      const {data} = await axios.get('http://localhost:5000/tracks', {
+        headers: {
+          'authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      console.log('response: ', data);
 
-      this.musicTracks = await response.data;
-      return response.data;
+      this.musicTracks = data;
+      return data;
     }
     catch(error) {
       this.error = error;
     }
   }
+
+  // async fetchOneTrack(id: string | string[]): Promise<any> {
+  //   try {
+  //     const {data} = await axios.get(`http://localhost:5000/tracks/${id}`, {
+  //       headers: {
+  //         'authorization': `Bearer ${localStorage.getItem('token')}`
+  //       }
+  //     });
+  //     console.log('response: ', data);
+
+  //     return data;
+  //   }
+  //   catch(error) {
+  //     this.error = error;
+  //   }
+  // }
 }
 
 export class PlayerStore {

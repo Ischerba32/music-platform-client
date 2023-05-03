@@ -19,12 +19,6 @@ const SignIn = () => {
 
   // const { tracksStore } = useContext(StoreContext);
 
-  // console.log(toJS(tracksStore.tracks));
-  // console.log('tracks: ', tracks);
-
-  // useEffect(() => {
-  //   tracksStore.tracks = tracks;
-  // }, [tracks])
 
   return (
     <AuthForm
@@ -40,11 +34,5 @@ export default observer(SignIn);
 
 
 // export const getServerSideProps = async () => {
-//   const tracks = await tracksStore.fetchTracks();
 
-//   return {
-//     props: {
-//       tracks
-//     },
-//   }
 // }

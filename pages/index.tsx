@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import MainLayout from "../layouts/MainLayout";
 import { useRouter } from "next/router";
-import { userStore } from "../store/store";
+import { tracksStore, userStore } from "../store/store";
 import { observer } from "mobx-react";
 
 const Index = () => {
@@ -19,6 +19,7 @@ const Index = () => {
         <div className="center">
           <h1>Добро пожаловать!</h1>
           <h3>Здесь собраны лучшие треки!</h3>
+          <button onClick={async () => await tracksStore.fetchTracks()}>Get tracks</button>
         </div>
       </MainLayout>
 
