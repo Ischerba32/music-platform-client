@@ -37,11 +37,17 @@ const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
 export default AlbumPage;
 
 
-export const getServerSideProps: GetServerSideProps = async ({params}) => {
-  const response = await axios.get('http://localhost:5000/albums/' + params.id);
+export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
+  const token = req.cookies['token'];
+  const response = await axios.get('http://localhost:5000/albums/' + params.id, {
+    headers: {
+        'authorization': `Bearer ${token}`
+    },
+    withCredentials: true
+    })
   return {
     props: {
-      serverAlbum: response.data
+        serverAlbum: response.data
     }
   }
 }

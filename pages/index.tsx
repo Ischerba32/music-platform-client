@@ -9,9 +9,9 @@ import { observer } from "mobx-react";
 const Index = () => {
   const router = useRouter();
 
-  useEffect(() => {
-    userStore.checkAuth().then(response => !response && router.push('/signIn'));
-  }, [router])
+  // useEffect(() => {
+  //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
+  // }, [router])
 
   return (
     <>

@@ -1,32 +1,36 @@
-import { Card, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
-import React, { PropsWithChildren } from 'react';
+import { Card, Container, Grid, Step, StepLabel, Stepper } from "@mui/material";
+import React, { PropsWithChildren } from "react";
 // import {Card, Container, Grid, Step, StepLabel, Stepper} from "@material-ui/core";
 
 interface StepWrapperProps {
-    activeStep: number;
+  activeStep: number;
+  steps?: number;
 }
-const steps = ['Информация о треке', 'Загрузите обложку', 'Загрузите сам трек']
+const STEPSINFO = ["Tracks info", "Cover", "Track"];
 
-const StepWrapper: React.FC<PropsWithChildren<StepWrapperProps>> = ({activeStep, children}) => {
-    return (
-        <Container>
-            <Stepper activeStep={activeStep}>
-                {steps.map((step, index) =>
-                    <Step
-                        key={index}
-                        completed={activeStep > index}
-                    >
-                        <StepLabel>{step}</StepLabel>
-                    </Step>
-                )}
-            </Stepper>
-            <Grid container justifyContent="center" style={{margin: '70px 0 ', height: 270}}>
-                <Card style={{width: 600}}>
-                    {children}
-                </Card>
-            </Grid>
-        </Container>
-    );
+const StepWrapper: React.FC<PropsWithChildren<StepWrapperProps>> = ({
+  activeStep,
+  steps,
+  children,
+}) => {
+  return (
+    <Container>
+      <Stepper activeStep={activeStep}>
+        {STEPSINFO.slice(0, steps).map((step, index) => (
+          <Step key={index} completed={activeStep > index}>
+            <StepLabel>{step}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <Grid
+        container
+        justifyContent="center"
+        style={{ margin: "70px 0 ", height: 270 }}
+      >
+        <Card style={{ width: 600 }}>{children}</Card>
+      </Grid>
+    </Container>
+  );
 };
 
 export default StepWrapper;

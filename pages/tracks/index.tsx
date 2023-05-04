@@ -28,9 +28,9 @@ const Index = () => {
     tracksStore.fetchTracks().then(response => console.log(response))
   }, [])
 
-  useEffect(() => {
-    userStore.checkAuth().then(response => !response && router.push('/signIn'));
-  }, [router])
+  // useEffect(() => {
+  //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
+  // }, [router])
 
   // if (error) {
   //   return (

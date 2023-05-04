@@ -16,9 +16,10 @@ import { observer } from "mobx-react";
 interface TrackItemProps {
   track: ITrack;
   active?: boolean;
+  onDelete?: (trackId: string) => void;
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+const TrackItem: React.FC<TrackItemProps> = ({ track, active = false, onDelete }) => {
   const router = useRouter();
   // const {playTrack, pauseTrack, setActiveTrack} = useActions()
   // const { currentTime, pause } = useTypedSelector(state => state.player)
@@ -30,14 +31,21 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
       playerStore.active = track;
       playerStore.play();
     }
-    else if (playerStore.active._id === trackId) {
+    else if (playerStore.active._id !== trackId) {
       playerStore.active = track;
-      playerStore.play()
+      playerStore.play();
+      playerStore.currentTime = 0;
     }
     else {
       playerStore.pause ? playerStore.play() : (playerStore.pause = true);
     }
   };
+
+  const handleDeleteTrack = (e) => {
+    e.stopPropagation();
+    if (!onDelete) return;
+    onDelete(track._id)
+  }
 
   return (
     <Card
@@ -72,7 +80,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
         <div>{formatTrackTime(track.duration)}</div>
       )}
       <IconButton
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleDeleteTrack}
         style={{ marginLeft: "auto" }}
       >
         <Delete />

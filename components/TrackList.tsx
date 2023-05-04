@@ -8,19 +8,21 @@ import { observer } from "mobx-react";
 
 interface TrackListProps {
   tracks: ITrack[];
+  onDelete?: (trackId: string) => void;
 }
 
-const TrackList: React.FC<TrackListProps> = ({ tracks }) => {
+const TrackList: React.FC<TrackListProps> = ({ tracks, onDelete }) => {
   // const { active } = useTypedSelector(state => state.player)
 
   return (
     <Grid container direction="column">
       <Box p={2}>
-        {tracks.map((track) => (
+        {tracks?.map((track) => (
           <TrackItem
             key={track._id}
             track={track}
             active={playerStore.active?._id === track._id}
+            onDelete={onDelete}
           />
         ))}
       </Box>

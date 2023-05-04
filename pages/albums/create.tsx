@@ -8,9 +8,10 @@ import MainLayout from '../../layouts/MainLayout'
 import StepWrapper from '../../components/StepWrapper'
 import { GeneralInfo, SetPicture } from '../../components/create-track-steps'
 import { Button, Grid } from '@mui/material'
+import $api from '../../config/axios'
 
 const Create = () => {
-  const [activeStep, setActiveStep] = useState(1)
+  const [activeStep, setActiveStep] = useState(0)
   const [picture, setPicture] = useState(null)
   const name = useInput('')
   const artist = useInput('')
@@ -18,14 +19,14 @@ const Create = () => {
   const router = useRouter()
 
   const next = () => {
-    if (activeStep !== 2) {
+    if (activeStep !== 1) {
       setActiveStep(prev => prev + 1)
     } else {
       const formData = new FormData();
       formData.append('artist', artist.value)
       formData.append('name', name.value)
       formData.append('picture', picture)
-      axios.post('http://localhost:5000/albums', formData)
+      $api.post('http://localhost:5000/albums', formData)
         .catch(e => console.log(e))
         .finally(() => router.push('/albums'));
     }
@@ -33,18 +34,18 @@ const Create = () => {
 
   const back = () => {
     setActiveStep(prev => prev - 1);
-}
+  }
 
   return (
   <MainLayout>
-    <StepWrapper activeStep={activeStep}>
+    <StepWrapper activeStep={activeStep} steps={2}>
       {activeStep === 0 &&
           <GeneralInfo
               name={name}
               artist={artist}
           />
       }
-      {activeStep === 2 &&
+      {activeStep === 1 &&
           <SetPicture picture={picture} setPicture={setPicture} />
       }
     </StepWrapper>

@@ -19,9 +19,10 @@ import UserDropDown from "./UserDropDown";
 import { observer } from "mobx-react";
 
 const menuItems = [
-  { text: "Главная", href: "/" },
-  { text: "Список треков", href: "/tracks" },
-  { text: "Список альбомов", href: "/albums" },
+  { text: "Home", href: "/" },
+  { text: "Tracks", href: "/tracks" },
+  { text: "Albums", href: "/albums" },
+  { text: "Playlists", href: "/playlists" },
 ];
 
 const Navbar = () => {

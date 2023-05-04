@@ -2,9 +2,12 @@ import { makeAutoObservable } from "mobx";
 import { ITrack } from "../types/track";
 import axios from "axios";
 import $api from "../config/axios";
+import { IAlbum } from "../types/album";
+import { IPlaylist } from "../types/playlist";
 
 export class UserStore {
   private userId: string;
+  private userName: string;
   private isLoggedIn: boolean = false;
   private role = null;
 
@@ -22,6 +25,14 @@ export class UserStore {
 
   public get userRole(): string | null {
     return this.role;
+  }
+
+  public get username(): string {
+    return this.userName;
+  }
+
+  public set username(username: string) {
+    this.userName = username;
   }
 
   public set id(id: string) {
@@ -46,6 +57,7 @@ export class UserStore {
       this.userId = response.data._doc._id;
       this.userRole = response.data._doc.role;
       this.isLogged = !!response.data.token;
+      this.userName = response.data._doc.username;
     } catch(error) {
       console.log(error);
 
@@ -60,17 +72,134 @@ export class UserStore {
 
   async checkAuth(){
     try {
-      const isAuthorized = await $api.get('/auth/check-auth');
-      console.log(isAuthorized.data);
-
-      if (!isAuthorized) {
-        this.isLogged = false;
-        return false;
-      }
+      const response = await $api.get('/auth/check-auth');
+      console.log(!!response.data.id);
+      this.userId = response.data.id;
+      this.userRole = response.data.role;
+      this.isLogged = true;
+      this.userName = response.data.username;
+      // if (!isAuthorized) {
+      //   this.isLogged = false;
+      //   return false;
+      // }
       return true;
     } catch (error) {
       return false;
     }
+  }
+}
+
+export class AlbumsStore {
+  private musicAlbums: IAlbum[] = [];
+  private errorMessage: string = '';
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  public get albums(): IAlbum[] {
+    return this.musicAlbums;
+  }
+
+  public get error(): string {
+    return this.errorMessage
+  }
+
+  public set albums(albums: IAlbum[]) {
+    this.musicAlbums = albums;
+  }
+
+  public set error(error: string) {
+    this.errorMessage = error;
+  }
+
+  async fetchAlbums() {
+    try {
+      const {data} = await $api.get('/albums');
+      this.albums = data;
+      return data
+    } catch (error) {
+      this.error = error;
+    }
+  }
+}
+
+export class PlaylistsStore {
+  private userPlaylists: IPlaylist[] = [];
+  private errorMessage: string = '';
+  // private playlist: IPlaylist;
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  public get playlists() {
+    return this.userPlaylists;
+  }
+  // public get currentPlaylist() {
+  //   return this.playlist;
+  // }
+
+  public get error(): string {
+    return this.errorMessage
+  }
+
+  public set playlists(playlists) {
+    this.userPlaylists = playlists;
+  }
+
+  // public set currentPlaylist(playlist) {
+  //   this.playlist = playlist;
+  // }
+
+  public set error(error: string) {
+    this.errorMessage = error;
+  }
+
+  async fetchPlaylists() {
+    try {
+      const {data} = await $api.get('/playlists');
+      this.playlists = data;
+      return data
+    } catch (error) {
+      this.error = error;
+    }
+  }
+
+  async removePlaylist(playlistId: string) {
+    try {
+      const deletedPlaylistId = await $api.delete('/playlists/' + playlistId)
+      this.userPlaylists = this.userPlaylists.filter(playlist => playlist._id !== playlistId)
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+  // async removeTrackFromPlaylist(trackId: string) {
+  //   try {
+  //     const response = await $api.post('/playlists/delete-track', {
+  //       playlistId: this.currentPlaylist._id,
+  //       trackId,
+  //     })
+  //     // this.currentPlaylist.tracks = this.currentPlaylist.tracks.filter(track => track._id !== trackId);
+  //     this.currentPlaylist = response.data;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+}
+
+export class AddTracksToPlaylistStore {
+  tracks: ITrack[] = []
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  async getUnaddedTracks(playlistId: string) {
+    const response = await $api.post('/tracks/' + playlistId);
+    this.tracks = response.data;
   }
 }
 
@@ -111,25 +240,10 @@ export class TracksStore {
       return data;
     }
     catch(error) {
-      this.error = error;
+      console.log(error);
+
     }
   }
-
-  // async fetchOneTrack(id: string | string[]): Promise<any> {
-  //   try {
-  //     const {data} = await axios.get(`http://localhost:5000/tracks/${id}`, {
-  //       headers: {
-  //         'authorization': `Bearer ${localStorage.getItem('token')}`
-  //       }
-  //     });
-  //     console.log('response: ', data);
-
-  //     return data;
-  //   }
-  //   catch(error) {
-  //     this.error = error;
-  //   }
-  // }
 }
 
 export class PlayerStore {
@@ -192,3 +306,5 @@ export class PlayerStore {
 export const userStore = new UserStore();
 export const playerStore = new PlayerStore();
 export const tracksStore = new TracksStore();
+export const albumsStore = new AlbumsStore();
+export const playlistsStore = new PlaylistsStore();

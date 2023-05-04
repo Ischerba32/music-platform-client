@@ -5,15 +5,31 @@ import { Box, Button, Card, Grid } from "@mui/material";
 import { NextThunkDispatch, wrapper } from "../../store";
 import { fetchAlbums } from "../../store/actions-creators/album";
 import Albums from "../../components/Albums";
+import { albumsStore, userStore } from "../../store/store";
+import { observer } from "mobx-react";
+import { useEffect } from "react";
+import { GetServerSideProps } from "next";
+import axios from "axios";
 
-const Index = () => {
+const Index = ({ albums }) => {
   const router = useRouter();
-  const { albums, error } = useTypedSelector((state) => state.album);
+  // const { albums, error } = useTypedSelector((state) => state.album);
 
-  if (error) {
+  useEffect(() => {
+   albumsStore.albums = albums;
+  }, [albums]);
+
+  console.log('albums: ', albums);
+
+
+  // useEffect(() => {
+  //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
+  // }, [router])
+
+  if (albumsStore.error) {
     return (
       <MainLayout>
-        <h1>{error}</h1>
+        <h1>{albumsStore.error}</h1>
       </MainLayout>
     );
   }
@@ -24,7 +40,7 @@ const Index = () => {
         <Card style={{ width: 900 }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
-              <h1>Список треков</h1>
+              <h1>Albums</h1>
               <Button onClick={() => router.push("/albums/create")}>
                 Создать
               </Button>
@@ -37,15 +53,30 @@ const Index = () => {
   )
 }
 
-export default Index;
+export default observer(Index);
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    const dispatch = store.dispatch as NextThunkDispatch;
-    await dispatch(await fetchAlbums());
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async () => {
+//     const dispatch = store.dispatch as NextThunkDispatch;
+//     await dispatch(await fetchAlbums());
 
-    return {
-      props: {}
+//     return {
+//       props: {}
+//     }
+//   }
+// )
+
+export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
+  const token = req.cookies['token'];
+  const response = await axios.get('http://localhost:5000/albums', {
+    headers: {
+        'authorization': `Bearer ${token}`
+    },
+    withCredentials: true
+    })
+  return {
+    props: {
+        albums: response.data
     }
   }
-)
+}
