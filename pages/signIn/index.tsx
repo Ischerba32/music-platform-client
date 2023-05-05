@@ -8,8 +8,8 @@ import { useRouter } from "next/router";
 
 const SignIn = () => {
   const router = useRouter();
-  const handleSignIn = (data: AuthFormParams) => {
-  userStore.signIn(data);
+  const handleSignIn = async (data: AuthFormParams) => {
+  await userStore.signIn(data);
   router.push('/')
   };
 

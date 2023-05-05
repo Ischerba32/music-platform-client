@@ -19,7 +19,7 @@ const PlaylistPage = ({ serverPlaylist }) => {
   // }, []);
 
   const handleDeleteTrackFromPlaylist = async (trackId: string) => {
-    await playlistsStore.removeTrackFromPlaylist(trackId);
+    await playlistsStore.removeTrackFromPlaylist(currentPlaylist._id, trackId);
     setCurrentPlaylist({
       ...currentPlaylist,
       tracks: currentPlaylist.tracks.filter(track => track._id !== trackId)

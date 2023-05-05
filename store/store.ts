@@ -57,13 +57,22 @@ export class UserStore {
       this.userId = response.data._doc._id;
       this.userRole = response.data._doc.role;
       this.isLogged = !!response.data.token;
-      this.userName = response.data._doc.username;
+      this.username = response.data._doc.username;
     } catch(error) {
       console.log(error);
 
     }
   }
-  async signUp(){}
+  async signUp(data){
+    try {
+      const response = await $api.post('/auth/signUp', {
+        ...data
+      })
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async logout(){
     localStorage.removeItem('token');
@@ -77,7 +86,7 @@ export class UserStore {
       this.userId = response.data.id;
       this.userRole = response.data.role;
       this.isLogged = true;
-      this.userName = response.data.username;
+      this.username = response.data.username;
       // if (!isAuthorized) {
       //   this.isLogged = false;
       //   return false;
@@ -120,6 +129,15 @@ export class AlbumsStore {
       return data
     } catch (error) {
       this.error = error;
+    }
+  }
+
+  async removeAlbum(albumId: string) {
+    try {
+      await $api.delete('/albums/' + albumId)
+      this.musicAlbums = this.musicAlbums.filter(album => album._id !== albumId);
+    } catch (error) {
+      console.log(error);
     }
   }
 }
@@ -176,18 +194,18 @@ export class PlaylistsStore {
     }
   }
 
-  // async removeTrackFromPlaylist(trackId: string) {
-  //   try {
-  //     const response = await $api.post('/playlists/delete-track', {
-  //       playlistId: this.currentPlaylist._id,
-  //       trackId,
-  //     })
-  //     // this.currentPlaylist.tracks = this.currentPlaylist.tracks.filter(track => track._id !== trackId);
-  //     this.currentPlaylist = response.data;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async removeTrackFromPlaylist(playlistId: string, trackId: string) {
+    try {
+      const response = await $api.post('/playlists/delete-track', {
+        playlistId,
+        trackId,
+      })
+      // this.currentPlaylist.tracks = this.currentPlaylist.tracks.filter(track => track._id !== trackId);
+      // this.currentPlaylist = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export class AddTracksToPlaylistStore {
@@ -236,7 +254,7 @@ export class TracksStore {
       });
       console.log('response: ', data);
 
-      this.musicTracks = data;
+      this.tracks = data;
       return data;
     }
     catch(error) {
@@ -251,7 +269,7 @@ export class PlayerStore {
   private activeTrack: ITrack | null = null;
   private volumePlayer = 50;
   private paused = true;
-  private isCollapsed = true;
+  private isCollapsed = false;
 
   constructor() {
     makeAutoObservable(this);

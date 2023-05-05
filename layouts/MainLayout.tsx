@@ -4,7 +4,7 @@ import Player from "../components/Player";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Container } from "@mui/material";
-import { userStore } from "../store/store";
+import { playerStore, userStore } from "../store/store";
 import { observer } from "mobx-react";
 
 interface MainLayoutProps {
@@ -45,7 +45,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       </Head>
       <Navbar />
       <Container style={{ margin: "90px 0" }}>{children}</Container>
-      <Player />
+      {playerStore.active && (
+        <Player />
+      )}
     </>
   );
 };

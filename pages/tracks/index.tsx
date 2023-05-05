@@ -13,8 +13,11 @@ import { tracksStore, userStore } from "../../store/store";
 import { observer } from "mobx-react-lite";
 import { StoreContext } from "../../context/storeContext";
 import { toJS } from "mobx";
+import axios from "axios";
+import { GetServerSideProps } from "next";
+import Error from "next/error";
 
-const Index = () => {
+const Index = ({ tracks, errorStatus }) => {
   const router = useRouter();
   // const { tracks: Storedtracks, error } = useTypedSelector((state) => state.track);
 
@@ -25,8 +28,14 @@ const Index = () => {
   // console.log('tracks: ', tracks);
 
   useEffect(() => {
-    tracksStore.fetchTracks().then(response => console.log(response))
-  }, [])
+    tracksStore.tracks = tracks;
+  }, [tracks])
+
+  if (errorStatus) {
+    return (
+      <Error statusCode={errorStatus} title="You have no permission on this page" />
+    );
+  }
 
   // useEffect(() => {
   //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
@@ -84,3 +93,26 @@ export default observer(Index);
 //     props: {},
 //   }
 // }
+
+export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
+  const token = req.cookies['token'];
+  try {
+    const response = await axios.get('http://localhost:5000/tracks', {
+      headers: {
+          'authorization': `Bearer ${token}`
+      },
+      withCredentials: true
+      })
+    return {
+      props: {
+        tracks: response.data,
+      }
+    }
+  } catch (error) {
+    return {
+      props: {
+          errorStatus: error.response.status
+      }
+    }
+  }
+}

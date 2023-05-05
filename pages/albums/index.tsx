@@ -10,8 +10,9 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import axios from "axios";
+import Error from "next/error";
 
-const Index = ({ albums }) => {
+const Index = ({ albums, errorStatus }) => {
   const router = useRouter();
   // const { albums, error } = useTypedSelector((state) => state.album);
 
@@ -21,16 +22,13 @@ const Index = ({ albums }) => {
 
   console.log('albums: ', albums);
 
-
   // useEffect(() => {
   //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
   // }, [router])
 
-  if (albumsStore.error) {
+  if (errorStatus) {
     return (
-      <MainLayout>
-        <h1>{albumsStore.error}</h1>
-      </MainLayout>
+      <Error statusCode={errorStatus} title="I have no permission on this page" />
     );
   }
 
@@ -68,15 +66,23 @@ export default observer(Index);
 
 export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
   const token = req.cookies['token'];
-  const response = await axios.get('http://localhost:5000/albums', {
-    headers: {
-        'authorization': `Bearer ${token}`
-    },
-    withCredentials: true
-    })
-  return {
-    props: {
-        albums: response.data
+  try {
+    const response = await axios.get('http://localhost:5000/albums', {
+      headers: {
+          'authorization': `Bearer ${token}`
+      },
+      withCredentials: true
+      })
+    return {
+      props: {
+        albums: response.data,
+      }
+    }
+  } catch (error) {
+    return {
+      props: {
+          errorStatus: error.response.status
+      }
     }
   }
 }

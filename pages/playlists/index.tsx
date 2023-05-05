@@ -7,8 +7,9 @@ import { Grid, Card, Box, Button } from "@mui/material";
 import MainLayout from "../../layouts/MainLayout";
 import Playlists from "../../components/Playlists";
 import { observer } from "mobx-react";
+import Error from "next/error";
 
-const PlaylistsPage = ({ playlists }) => {
+const PlaylistsPage = ({ playlists, errorStatus }) => {
   console.log(playlists);
   const router = useRouter();
 
@@ -20,11 +21,9 @@ const PlaylistsPage = ({ playlists }) => {
   //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
   // }, [router])
 
-  if (playlistsStore.error) {
+  if (errorStatus) {
     return (
-      <MainLayout>
-        <h1>{playlistsStore.error}</h1>
-      </MainLayout>
+      <Error statusCode={errorStatus} title="You have no permission on this page" />
     );
   }
 
@@ -55,15 +54,23 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
 }) => {
   const token = req.cookies["token"];
-  const response = await axios.get("http://localhost:5000/playlists", {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-    withCredentials: true,
-  });
-  return {
-    props: {
-      playlists: response.data,
-    },
-  };
+  try {
+    const response = await axios.get("http://localhost:5000/playlists", {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+    return {
+      props: {
+        playlists: response.data,
+      },
+    };
+  } catch(error) {
+    return {
+      props: {
+        errorStatus: error.response.status,
+      }
+    }
+  }
 };

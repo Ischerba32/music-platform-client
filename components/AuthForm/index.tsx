@@ -11,6 +11,7 @@ import {
 export interface AuthFormParams {
   email: string;
   password: string;
+  username?: string;
 }
 
 export interface AuthFormProps {
@@ -53,6 +54,20 @@ export const AuthForm = ({
           error={Boolean(errors.email)}
           helperText={errors.email?.message}
         />
+        {formAction === 'SignUp' && (
+          <TextField
+            margin="normal"
+            fullWidth
+            label="Username"
+            autoComplete="username"
+            autoFocus
+            {...register("username", {
+              required: { value: true, message: "Enter the username" },
+            })}
+            error={Boolean(errors.username)}
+            helperText={errors.username?.message}
+          />
+        )}
         <TextField
           margin="normal"
           fullWidth

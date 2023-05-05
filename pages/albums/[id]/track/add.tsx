@@ -9,6 +9,7 @@ import MainLayout from '../../../../layouts/MainLayout'
 import StepWrapper from '../../../../components/StepWrapper'
 import { GeneralInfo, SetAudio, SetPicture } from '../../../../components/create-track-steps'
 import { Button, Grid } from '@mui/material'
+import $api from '../../../../config/axios'
 
 const Add = ({albumId}) => {
   const [activeStep, setActiveStep] = useState(0)
@@ -29,8 +30,8 @@ const Add = ({albumId}) => {
         formData.append('artist', artist.value)
         formData.append('picture', picture)
         formData.append('audio', audio)
-        axios.post('http://localhost:5000/tracks', formData)
-          .then(response => axios.post('http://localhost:5000/albums/track', {
+        $api.post('/tracks', formData)
+          .then(response => $api.post('/albums/track', {
             albumId,
             trackId: response.data._id
           }))

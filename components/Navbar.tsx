@@ -17,18 +17,51 @@ import {
 } from "@mui/material";
 import UserDropDown from "./UserDropDown";
 import { observer } from "mobx-react";
+import { userStore } from "../store/store";
 
-const menuItems = [
-  { text: "Home", href: "/" },
-  { text: "Tracks", href: "/tracks" },
-  { text: "Albums", href: "/albums" },
-  { text: "Playlists", href: "/playlists" },
-];
+// const menuItems = [
+//   { text: "Home", href: "/" },
+//   { text: "Tracks", href: "/tracks" },
+//   { text: "Albums", href: "/albums" },
+//   { text: "Playlists", href: "/playlists" },
+// ];
+
+const getRoutesByRole = (userRole: string) => {
+  const defaultRoutes = [
+    {
+      text: "Home",
+      href: "/",
+    },
+  ];
+  switch (userRole) {
+    case "admin":
+      return [
+        ...defaultRoutes,
+        { text: "Tracks", href: "/tracks" },
+        { text: "Albums", href: "/albums" },
+        { text: "Playlists", href: "/playlists" },
+      ];
+    case "user":
+      return [
+        ...defaultRoutes,
+        { text: "Playlists", href: "/playlists" },
+      ]
+    case "artist":
+      return [
+        ...defaultRoutes,
+        { text: "Albums", href: "/albums" }
+      ];
+    default:
+      return defaultRoutes
+  }
+};
 
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
+  const menuItems = React.useMemo(() => getRoutesByRole(userStore.userRole), [userStore.userRole]);
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -76,6 +109,6 @@ const Navbar = () => {
       </Drawer>
     </Box>
   );
-}
+};
 
 export default observer(Navbar);

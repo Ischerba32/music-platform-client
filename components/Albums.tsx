@@ -3,6 +3,8 @@ import { IAlbum } from "../types/album";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Box, Grid } from "@mui/material";
 import AlbumItem from "./AlbumItem";
+import { observer } from "mobx-react";
+import { albumsStore } from "../store/store";
 
 
 interface AlbumsProps {
@@ -10,11 +12,11 @@ interface AlbumsProps {
 }
 
 const Albums: FC<AlbumsProps> = ({albums}) => {
-  const { active } = useTypedSelector((state) => state.player);
+  // const { active } = useTypedSelector((state) => state.player);
   return (
     <Grid container direction="column">
       <Box p={2}>
-        {albums.map((album) => (
+        {albumsStore.albums.map((album) => (
           <AlbumItem
             key={album._id}
             album={album}
@@ -25,4 +27,4 @@ const Albums: FC<AlbumsProps> = ({albums}) => {
   )
 }
 
-export default Albums
+export default observer(Albums)
