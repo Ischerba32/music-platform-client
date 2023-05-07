@@ -9,8 +9,10 @@ import { useRouter } from "next/router";
 const SignIn = () => {
   const router = useRouter();
   const handleSignIn = async (data: AuthFormParams) => {
-  await userStore.signIn(data);
-  router.push('/')
+  const role = await userStore.signIn(data);
+  console.log(role);
+
+  router.push('/' + (role === 'user' ? '' : role))
   };
 
   useEffect(() => {

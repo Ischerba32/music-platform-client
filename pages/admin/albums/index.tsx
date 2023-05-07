@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import MainLayout from "../../layouts/MainLayout";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import MainLayout from "../../../layouts/MainLayout";
 import { Box, Button, Card, Grid } from "@mui/material";
-import { NextThunkDispatch, wrapper } from "../../store";
-import { fetchAlbums } from "../../store/actions-creators/album";
-import Albums from "../../components/Albums";
-import { albumsStore, userStore } from "../../store/store";
+import { NextThunkDispatch, wrapper } from "../../../store";
+import { fetchAlbums } from "../../../store/actions-creators/album";
+import Albums from "../../../components/Albums";
+import { albumsStore, userStore } from "../../../store/store";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { GetServerSideProps } from "next";

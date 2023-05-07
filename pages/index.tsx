@@ -19,7 +19,6 @@ const Index = () => {
         <div className="center">
           <h1>Добро пожаловать!</h1>
           <h3>Здесь собраны лучшие треки!</h3>
-          <button onClick={async () => await tracksStore.fetchTracks()}>Get tracks</button>
         </div>
       </MainLayout>
 
@@ -37,4 +36,4 @@ const Index = () => {
   );
 };
 
-export default observer(Index);
+export default Index;

@@ -9,7 +9,7 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import formatTrackTime from "../utils/formatTime";
 import { Card, Grid, IconButton } from "@mui/material";
 import { Delete, Pause, PlayArrow } from "@mui/icons-material";
-import { playerStore } from "../store/store";
+import { playerStore, userStore } from "../store/store";
 import Image from "next/image";
 import { observer } from "mobx-react";
 
@@ -19,7 +19,7 @@ interface TrackItemProps {
   onDelete?: (trackId: string) => void;
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({ track, active = false, onDelete }) => {
+const TrackItem = ({ track, active = false, onDelete }) => {
   const router = useRouter();
   // const {playTrack, pauseTrack, setActiveTrack} = useActions()
   // const { currentTime, pause } = useTypedSelector(state => state.player)
@@ -69,7 +69,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false, onDelete }
         style={{ width: 200, margin: "0 20px" }}
       >
         <div>{track.name}</div>
-        <div style={{ fontSize: 12, color: "gray" }}>{track.artist}</div>
+        <div style={{ fontSize: 12, color: "gray" }}>{track.artist.username}</div>
       </Grid>
       {active ? (
         <div>
@@ -79,12 +79,14 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false, onDelete }
       ) : (
         <div>{formatTrackTime(track.duration)}</div>
       )}
-      <IconButton
-        onClick={handleDeleteTrack}
-        style={{ marginLeft: "auto" }}
-      >
-        <Delete />
-      </IconButton>
+      {userStore.userRole !== 'user' && (
+        <IconButton
+          onClick={handleDeleteTrack}
+          style={{ marginLeft: "auto" }}
+        >
+          <Delete />
+        </IconButton>
+      )}
     </Card>
   );
 };

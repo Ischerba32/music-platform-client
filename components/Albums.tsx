@@ -6,12 +6,7 @@ import AlbumItem from "./AlbumItem";
 import { observer } from "mobx-react";
 import { albumsStore } from "../store/store";
 
-
-interface AlbumsProps {
-  albums: IAlbum[];
-}
-
-const Albums: FC<AlbumsProps> = ({albums}) => {
+const Albums = () => {
   // const { active } = useTypedSelector((state) => state.player);
   return (
     <Grid container direction="column">

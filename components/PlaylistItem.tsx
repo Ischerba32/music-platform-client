@@ -20,20 +20,26 @@ const PlaylistItem = ({ playlist }) => {
   }
 
   return (
-    <Card
-      className={styles.track}
-      onClick={handleClickPlaylist}
-    >
-    <Image width={70} height={70} src={'http://localhost:5000/' + playlist.picture} alt={playlist.name} />
-    <Grid container direction="column" style={{width: 200, margin: '0 20px'}}>
-      <div>{playlist.name}</div>
-      {/* <div style={{fontSize: 12, color: 'gray'}}>{album.artist}</div> */}
-    </Grid>
-    <IconButton onClick={handleDeletePlaylist} style={{marginLeft: 'auto'}}>
-      <Delete/>
-    </IconButton>
+    <Card className={styles.track} onClick={handleClickPlaylist}>
+      <Image
+        width={70}
+        height={70}
+        src={"http://localhost:5000/" + playlist.picture}
+        alt={playlist.name}
+      />
+      <Grid
+        container
+        direction="column"
+        style={{ width: 200, margin: "0 20px" }}
+      >
+        <div>{playlist.name}</div>
+        {/* <div style={{fontSize: 12, color: 'gray'}}>{album.artist}</div> */}
+      </Grid>
+      <IconButton onClick={handleDeletePlaylist} style={{ marginLeft: "auto" }}>
+        <Delete />
+      </IconButton>
     </Card>
-  )
+  );
 }
 
 export default observer(PlaylistItem)

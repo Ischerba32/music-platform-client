@@ -1,26 +1,29 @@
 import { useRouter } from "next/router";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import MainLayout from "../../layouts/MainLayout";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import MainLayout from "../../../layouts/MainLayout";
 import { Box, Button, Card, Grid } from "@mui/material";
-import { NextThunkDispatch, wrapper } from "../../store";
-import { fetchAlbums } from "../../store/actions-creators/album";
-import Albums from "../../components/Albums";
-import { albumsStore, userStore } from "../../store/store";
+import { NextThunkDispatch, wrapper } from "../../../store";
+import { fetchAlbums } from "../../../store/actions-creators/album";
+import Albums from "../../../components/Albums";
+import { albumsStore, userStore } from "../../../store/store";
 import { observer } from "mobx-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import axios from "axios";
 import Error from "next/error";
+import { usersStore } from "../../../store/store";
+import Users from "../../../components/Users";
 
-const Index = ({ albums, errorStatus }) => {
+const Index = ({ users, errorStatus }) => {
+  // const [appUsers, setAppUsers] = useState(users);
   const router = useRouter();
   // const { albums, error } = useTypedSelector((state) => state.album);
 
   useEffect(() => {
-   albumsStore.albums = albums;
-  }, [albums]);
+   usersStore.users = users;
+  }, [users]);
 
-  console.log('albums: ', albums);
+  // console.log('albums: ', albums);
 
   // useEffect(() => {
   //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
@@ -33,15 +36,16 @@ const Index = ({ albums, errorStatus }) => {
   }
 
   return (
-    <MainLayout title={"Список альбомов - музыкальная площадка"}>
+    <MainLayout>
       <Grid container justifyContent="center">
         <Card style={{ width: 900 }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
-              <h1>Albums</h1>
+              <h1>Users</h1>
             </Grid>
           </Box>
-          <Albums />
+          <Users />
+          {/* <Albums albums={albums} /> */}
         </Card>
       </Grid>
     </MainLayout>
@@ -50,21 +54,11 @@ const Index = ({ albums, errorStatus }) => {
 
 export default observer(Index);
 
-// export const getServerSideProps = wrapper.getServerSideProps(
-//   (store) => async () => {
-//     const dispatch = store.dispatch as NextThunkDispatch;
-//     await dispatch(await fetchAlbums());
-
-//     return {
-//       props: {}
-//     }
-//   }
-// )
 
 export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
   const token = req.cookies['token'];
   try {
-    const response = await axios.get('http://localhost:5000/albums', {
+    const response = await axios.get('http://localhost:5000/users', {
       headers: {
           'authorization': `Bearer ${token}`
       },
@@ -72,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
       })
     return {
       props: {
-        albums: response.data,
+        users: response.data,
       }
     }
   } catch (error) {

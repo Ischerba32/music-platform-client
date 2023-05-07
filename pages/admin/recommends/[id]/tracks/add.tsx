@@ -1,27 +1,27 @@
 import { observer } from 'mobx-react'
 import React, { useEffect, useState } from 'react'
-import MainLayout from '../../../../layouts/MainLayout'
+import MainLayout from '../../../../../layouts/MainLayout'
 import { Box, Button, Card, Grid } from '@mui/material'
-import { AddTracksToPlaylistStore } from '../../../../store/store'
+import { AddTracksToPlaylistStore } from '../../../../../store/store'
 import { GetServerSideProps } from 'next'
-import $api from '../../../../config/axios'
+import $api from '../../../../../config/axios'
 import { useRouter } from 'next/router'
 
-const notInPlaylistTracks = new AddTracksToPlaylistStore();
+const notInRecommendTracks = new AddTracksToPlaylistStore();
 
-const Add = ({playlistId}) => {
+const Add = ({recommendId}) => {
   const [addedCount, setAddedCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
-    notInPlaylistTracks.getUnaddedTracks(playlistId, "playlist");
-  }, [playlistId, addedCount])
+    notInRecommendTracks.getUnaddedTracks(recommendId, "recommend");
+  }, [recommendId, addedCount])
 
-  console.log(playlistId);
+  console.log(recommendId);
 
   const handleAddTrackButton = async (trackId: string) => {
-    await $api.post('/playlists/track', {
-      playlistId,
+    await $api.post('/recommends/track', {
+      recommendId,
       trackId,
     })
     setAddedCount((prev) => prev + 1);
@@ -37,7 +37,7 @@ const Add = ({playlistId}) => {
               <h4>added: {addedCount}</h4>
             </Grid>
           </Box>
-          {notInPlaylistTracks.tracks.map((track) => (
+          {notInRecommendTracks.tracks.map((track) => (
             <div key={track._id}>
               <span>{track.artist} - {track.name}</span>
               <button onClick={() => handleAddTrackButton(track._id)}>+</button>
@@ -45,7 +45,7 @@ const Add = ({playlistId}) => {
           ))}
           {/* <TrackList tracks={tracksStore.musicTracks} /> */}
         </Card>
-        <Button onClick={() => router.push(`/playlists/${playlistId}`)}>Done</Button>
+        <Button onClick={() => router.push(`/admin/recommends/${recommendId}`)}>Done</Button>
       </Grid>
     </MainLayout>
   )
@@ -56,7 +56,7 @@ export default observer(Add)
 export const getServerSideProps: GetServerSideProps = async ({params}) => {
   return {
     props: {
-        playlistId: params.id
+        recommendId: params.id
     }
   }
 }

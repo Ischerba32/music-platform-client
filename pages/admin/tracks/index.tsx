@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from "react";
-import MainLayout from "../../layouts/MainLayout";
+import MainLayout from "../../../layouts/MainLayout";
 import { Box, Button, Card, Grid } from "@mui/material";
 import { useRouter } from "next/router";
-import { ITrack } from "../../types/track";
-import TrackList from "../../components/TrackList";
-import Player from "../../components/Player";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActions } from "../../hooks/useActions";
-import { NextThunkDispatch, wrapper } from "../../store";
-import { fetchTracks } from "../../store/actions-creators/track";
-import { tracksStore, userStore } from "../../store/store";
+import { ITrack } from "../../../types/track";
+import TrackList from "../../../components/TrackList";
+import Player from "../../../components/Player";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { useActions } from "../../../hooks/useActions";
+import { NextThunkDispatch, wrapper } from "../../../store";
+import { fetchTracks } from "../../../store/actions-creators/track";
+import { tracksStore, userStore } from "../../../store/store";
 import { observer } from "mobx-react-lite";
-import { StoreContext } from "../../context/storeContext";
+import { StoreContext } from "../../../context/storeContext";
 import { toJS } from "mobx";
 import axios from "axios";
 import { GetServerSideProps } from "next";
@@ -37,17 +37,9 @@ const Index = ({ tracks, errorStatus }) => {
     );
   }
 
-  // useEffect(() => {
-  //   userStore.checkAuth().then(response => !response && router.push('/signIn'));
-  // }, [router])
-
-  // if (error) {
-  //   return (
-  //     <MainLayout>
-  //       <h1>{error}</h1>
-  //     </MainLayout>
-  //   );
-  // }
+  const handleDeleteTrack = async (trackId: string) => {
+    await tracksStore.removeTrack(trackId);
+  }
 
   return (
     <MainLayout title={"Список треков - музыкальная площадка"}>
@@ -56,12 +48,15 @@ const Index = ({ tracks, errorStatus }) => {
           <Box p={3}>
             <Grid container justifyContent="space-between">
               <h1>Список треков</h1>
-              <Button onClick={() => router.push("/tracks/create")}>
+              <Button onClick={() => router.push("/admin/tracks/create")}>
                 Загрузить
               </Button>
             </Grid>
           </Box>
-          <TrackList tracks={tracksStore.musicTracks} />
+          <TrackList
+            tracks={tracksStore.musicTracks}
+            onDelete={handleDeleteTrack}
+          />
         </Card>
       </Grid>
     </MainLayout>

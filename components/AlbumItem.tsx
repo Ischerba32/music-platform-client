@@ -5,13 +5,14 @@ import styles from "../styles/TrackItem.module.scss";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Delete } from "@mui/icons-material";
-import { albumsStore } from "../store/store";
+import { albumsStore, userStore } from "../store/store";
+import { observer } from "mobx-react";
 
 interface AlbumItemProps {
   album: IAlbum;
 }
 
-const AlbumItem: FC<AlbumItemProps> = ({ album }) => {
+const AlbumItem = ({ album }) => {
   const router = useRouter();
 
   const handleDeleteAlbum = async (e) => {
@@ -19,10 +20,16 @@ const AlbumItem: FC<AlbumItemProps> = ({ album }) => {
     await albumsStore.removeAlbum(album._id);
   }
 
+  const handleClickAlbum = () => {
+    if (userStore.userRole !== "admin") {
+      router.push("/albums/" + album._id)
+    }
+  }
+
   return (
     <Card
       className={styles.track}
-      onClick={() => router.push("/albums/" + album._id)}
+      onClick={handleClickAlbum}
     >
       <Image
         width={70}
@@ -36,16 +43,18 @@ const AlbumItem: FC<AlbumItemProps> = ({ album }) => {
         style={{ width: 200, margin: "0 20px" }}
       >
         <div>{album.name}</div>
-        <div style={{ fontSize: 12, color: "gray" }}>{album.artist}</div>
+        <div style={{ fontSize: 12, color: "gray" }}>{album.artist.username}</div>
       </Grid>
-      <IconButton
-        onClick={handleDeleteAlbum}
-        style={{ marginLeft: "auto" }}
-      >
-        <Delete />
-      </IconButton>
+      {userStore.userRole === 'artist' && (
+        <IconButton
+          onClick={handleDeleteAlbum}
+          style={{ marginLeft: "auto" }}
+        >
+          <Delete />
+        </IconButton>
+      )}
     </Card>
   );
 };
 
-export default AlbumItem;
+export default observer(AlbumItem);

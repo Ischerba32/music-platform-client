@@ -1,7 +1,7 @@
 import * as React from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { ChevronLeft, Inbox, Mail, Menu } from "@mui/icons-material";
+import { Album, ChevronLeft, Home, Inbox, LibraryMusic, Mail, Menu, People, QueueMusic, Recommend } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -31,25 +31,28 @@ const getRoutesByRole = (userRole: string) => {
     {
       text: "Home",
       href: "/",
+      icon: <Home />
     },
   ];
   switch (userRole) {
     case "admin":
       return [
-        ...defaultRoutes,
-        { text: "Tracks", href: "/tracks" },
-        { text: "Albums", href: "/albums" },
-        { text: "Playlists", href: "/playlists" },
+        { text: "Home", href: '/admin', icon: <Home /> },
+        { text: "Users", href: '/admin/users', icon: <People /> },
+        { text: "Tracks", href: "/admin/tracks", icon: <LibraryMusic /> },
+        { text: "Albums", href: "/admin/albums", icon: <Album /> },
+        { text: "Recommends", href: "/admin/recommends", icon: <Recommend /> },
       ];
     case "user":
       return [
         ...defaultRoutes,
-        { text: "Playlists", href: "/playlists" },
+        { text: "Playlists", href: "/playlists", icon: <QueueMusic /> },
+        { text: "Albums", href: "/albums", icon: <Album /> },
       ]
     case "artist":
       return [
-        ...defaultRoutes,
-        { text: "Albums", href: "/albums" }
+        { text: "Home", href: "/artist", icon: <Home /> },
+        { text: "Albums", href: "/artist/albums", icon: <Album /> }
       ];
     default:
       return defaultRoutes
@@ -61,7 +64,7 @@ const Navbar = () => {
   const router = useRouter();
 
   const menuItems = React.useMemo(() => getRoutesByRole(userStore.userRole), [userStore.userRole]);
-  
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -97,10 +100,10 @@ const Navbar = () => {
           </IconButton>
         </div>
         <List>
-          {menuItems.map(({ text, href }, index) => (
+          {menuItems.map(({ text, href, icon }, index) => (
             <ListItem button key={href} onClick={() => router.push(href)}>
               <ListItemIcon>
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
+                {icon}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>

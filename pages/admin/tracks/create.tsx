@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import MainLayout from "../../layouts/MainLayout";
-import StepWrapper from "../../components/StepWrapper";
+import MainLayout from "../../../layouts/MainLayout";
+import StepWrapper from "../../../components/StepWrapper";
 import {Button, Grid} from "@mui/material";
-import {useInput} from "../../hooks/useInput";
+import {useInput} from "../../../hooks/useInput";
 import axios from "axios";
 import {useRouter} from "next/router";
-import {GeneralInfo, SetPicture, SetAudio} from '../../components/create-track-steps/';
+import {GeneralInfo, SetPicture, SetAudio} from '../../../components/create-track-steps/';
+import $api from '../../../config/axios';
 
 
 const Create = () => {
@@ -27,9 +28,9 @@ const Create = () => {
             formData.append('artist', artist.value)
             formData.append('picture', picture)
             formData.append('audio', audio)
-            axios.post('http://localhost:5000/tracks', formData)
+            $api.post('http://localhost:5000/tracks', formData)
                 .catch(e => console.log(e))
-                .finally(() => router.push('/tracks'))
+                .finally(() => router.push('/admin/tracks'))
         }
     }
 

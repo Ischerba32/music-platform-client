@@ -3,13 +3,11 @@
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import React, { FC } from 'react'
-import { IAlbum } from '../../../types/album';
-import MainLayout from '../../../layouts/MainLayout';
+import { IAlbum } from '../../../../types/album';
+import MainLayout from '../../../../layouts/MainLayout';
 import { Box, Button, Card, Grid } from '@mui/material';
-import TrackList from '../../../components/TrackList';
+import TrackList from '../../../../components/TrackList';
 import { useRouter } from 'next/router';
-import { observer } from 'mobx-react';
-import { userStore } from '../../../store/store';
 
 interface AlbumPageProps {
   serverAlbum: IAlbum;
@@ -17,20 +15,16 @@ interface AlbumPageProps {
 
 const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
   const router = useRouter();
-  console.log(serverAlbum);
-
   return (
-    <MainLayout title={`${serverAlbum.artist} - ${serverAlbum.name}`}>
+    <MainLayout title={`${serverAlbum.artist.username} - ${serverAlbum.name}`}>
       <Grid container justifyContent="center">
         <Card style={{ width: 900 }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
-              <h1>{`${serverAlbum.artist.username} - ${serverAlbum.name}`}</h1>
-              {userStore.userRole === 'artist' && (
-                <Button onClick={() => router.push(`/artist/albums/${serverAlbum._id}/track/add`)}>
-                  Добавить трек
-                </Button>
-              )}
+              <h1>{`${serverAlbum.artist} - ${serverAlbum.name}`}</h1>
+              <Button onClick={() => router.push(`/artist/albums/${serverAlbum._id}/track/add`)}>
+                Добавить трек
+              </Button>
             </Grid>
           </Box>
           <TrackList tracks={serverAlbum.tracks} />
@@ -40,7 +34,7 @@ const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
   )
 }
 
-export default observer(AlbumPage);
+export default AlbumPage;
 
 
 export const getServerSideProps: GetServerSideProps = async ({params, req}) => {

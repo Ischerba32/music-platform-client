@@ -4,6 +4,7 @@ import axios from "axios";
 import $api from "../config/axios";
 import { IAlbum } from "../types/album";
 import { IPlaylist } from "../types/playlist";
+import { IRecommend } from "../types/recommend";
 
 export class UserStore {
   private userId: string;
@@ -58,6 +59,7 @@ export class UserStore {
       this.userRole = response.data._doc.role;
       this.isLogged = !!response.data.token;
       this.username = response.data._doc.username;
+      return response.data._doc.role;
     } catch(error) {
       console.log(error);
 
@@ -98,6 +100,40 @@ export class UserStore {
   }
 }
 
+export class UsersStore {
+  private appUsers = [];
+  private errorMessage: string = '';
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  public get users() {
+    return this.appUsers;
+  }
+
+  public get error(): string {
+    return this.errorMessage
+  }
+
+  public set users(users) {
+    this.appUsers = users;
+  }
+
+  public set error(error: string) {
+    this.errorMessage = error;
+  }
+
+  async removeUser(userId: string) {
+    try {
+      await $api.delete('/users/' + userId)
+      this.appUsers = this.appUsers.filter(user => user._id !== userId);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
 export class AlbumsStore {
   private musicAlbums: IAlbum[] = [];
   private errorMessage: string = '';
@@ -124,7 +160,7 @@ export class AlbumsStore {
 
   async fetchAlbums() {
     try {
-      const {data} = await $api.get('/albums');
+      const {data} = await $api.get('/albums/all/' + userStore.id);
       this.albums = data;
       return data
     } catch (error) {
@@ -208,6 +244,69 @@ export class PlaylistsStore {
   }
 }
 
+export class RecommendsStore {
+  private userRecommends: IRecommend[] = [];
+  private errorMessage: string = '';
+  // private playlist: IPlaylist;
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  public get recommends() {
+    return this.userRecommends;
+  }
+  // public get currentPlaylist() {
+  //   return this.playlist;
+  // }
+
+  public get error(): string {
+    return this.errorMessage
+  }
+
+  public set recommends(recommends) {
+    this.userRecommends = recommends;
+  }
+
+  public set error(error: string) {
+    this.errorMessage = error;
+  }
+
+  async fetchRecommends() {
+    try {
+      const {data} = await $api.get('/recommends');
+      this.recommends = data;
+      return data
+    } catch (error) {
+      this.error = error;
+    }
+  }
+
+  async removeRecommend(recommendId: string) {
+    try {
+      const deletedRecommendId = await $api.delete('/recommends/' + recommendId)
+      this.userRecommends = this.userRecommends.filter(recommend => recommend._id !== recommendId)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async removeTrackFromRecommend(recommendId: string, trackId: string) {
+    try {
+      const response = await $api.post('/recommends/delete-track', {
+        recommendId,
+        trackId,
+      })
+      // this.currentPlaylist.tracks = this.currentPlaylist.tracks.filter(track => track._id !== trackId);
+      // this.currentPlaylist = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+
+
 export class AddTracksToPlaylistStore {
   tracks: ITrack[] = []
 
@@ -215,8 +314,8 @@ export class AddTracksToPlaylistStore {
     makeAutoObservable(this);
   }
 
-  async getUnaddedTracks(playlistId: string) {
-    const response = await $api.post('/tracks/' + playlistId);
+  async getUnaddedTracks(playlistId: string, type: string) {
+    const response = await $api.post('/tracks/' + playlistId, {type});
     this.tracks = response.data;
   }
 }
@@ -259,6 +358,15 @@ export class TracksStore {
     }
     catch(error) {
       console.log(error);
+
+    }
+  }
+
+  async removeTrack(trackId: string) {
+    try {
+      const deletedTrackId = await $api.delete('/tracks/' + trackId)
+      this.musicTracks = this.musicTracks.filter(track => track._id !== trackId)
+    } catch (error) {
 
     }
   }
@@ -322,7 +430,9 @@ export class PlayerStore {
 }
 
 export const userStore = new UserStore();
+export const usersStore = new UsersStore();
 export const playerStore = new PlayerStore();
 export const tracksStore = new TracksStore();
 export const albumsStore = new AlbumsStore();
 export const playlistsStore = new PlaylistsStore();
+export const recommendsStore = new RecommendsStore();
