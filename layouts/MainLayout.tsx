@@ -25,8 +25,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   useEffect(() => {
     userStore
       .checkAuth()
-      .then((response) => !response && router.push("/signIn"));
-  }, [router]);
+      .then((response) => {
+        console.log('page auth', response)
+        !response && router.push("/signIn")});
+  }, []);
 
   return (
     <>
@@ -44,7 +46,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
-      <Container style={{ margin: "90px 0" }}>{children}</Container>
+      <Container maxWidth={false} style={{ margin: "90px 0" }}>{children}</Container>
       {playerStore.active && (
         <Player />
       )}

@@ -4,8 +4,6 @@ import clsx from "clsx";
 // import {Button, Grid, IconButton} from "@material-ui/core";
 import styles from "../styles/Player.module.scss";
 import TrackProgress from "./TrackProgress";
-import { useTypedSelector } from "../hooks/useTypedSelector";
-import { useActions } from "../hooks/useActions";
 import TrackVolume from "./TrackVolume";
 import { Button, Grid, IconButton } from "@mui/material";
 import {
@@ -16,7 +14,7 @@ import {
   ExpandLess,
 } from "@mui/icons-material";
 import { playerStore, tracksStore } from "../store/store";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 // import RevealIcon from '@material-ui/icons/ArrowDropUp';
 // import CollapseIcon from '@material-ui/icons/ArrowDropDown';
 
@@ -31,6 +29,7 @@ const Player = () => {
     if (!audio) {
       audio = new Audio();
     } else {
+      playerStore.currentTime = 0;
       setAudio();
     }
   }, [playerStore.active]);
@@ -50,17 +49,12 @@ const Player = () => {
       audio.volume = playerStore.volume / 100;
       audio.currentTime = playerStore.currentTime;
       audio.ontimeupdate = () => {
-        // setCurrentTime(Math.ceil(audio.currentTime))
         playerStore.currentTime = Math.ceil(audio.currentTime);
       };
+
+      const nextTrackIndex = tracksStore.getNextTrackIndex(playerStore.active._id);
+
       audio.onended = () => {
-        let nextTrackIndex = tracksStore.tracks.indexOf(playerStore.active) + 1;
-
-        nextTrackIndex = tracksStore.tracks[nextTrackIndex]
-          ? nextTrackIndex
-          : 0;
-
-        // setActiveTrack(tracks[nextTrackIndex])
         playerStore.active = tracksStore.tracks[nextTrackIndex];
       };
     }

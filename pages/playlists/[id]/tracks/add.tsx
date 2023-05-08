@@ -39,7 +39,7 @@ const Add = ({playlistId}) => {
           </Box>
           {notInPlaylistTracks.tracks.map((track) => (
             <div key={track._id}>
-              <span>{track.artist} - {track.name}</span>
+              <span>{track.artist.username} - {track.name}</span>
               <button onClick={() => handleAddTrackButton(track._id)}>+</button>
             </div>
           ))}

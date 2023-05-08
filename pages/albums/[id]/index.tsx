@@ -2,14 +2,14 @@
 
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { IAlbum } from '../../../types/album';
 import MainLayout from '../../../layouts/MainLayout';
 import { Box, Button, Card, Grid } from '@mui/material';
 import TrackList from '../../../components/TrackList';
 import { useRouter } from 'next/router';
 import { observer } from 'mobx-react';
-import { userStore } from '../../../store/store';
+import { tracksStore, userStore } from '../../../store/store';
 
 interface AlbumPageProps {
   serverAlbum: IAlbum;
@@ -18,6 +18,10 @@ interface AlbumPageProps {
 const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
   const router = useRouter();
   console.log(serverAlbum);
+
+  useEffect(() => {
+    tracksStore.tracks = serverAlbum.tracks;
+  }, [serverAlbum])
 
   return (
     <MainLayout title={`${serverAlbum.artist} - ${serverAlbum.name}`}>

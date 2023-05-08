@@ -1,7 +1,7 @@
 import * as React from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { Album, ChevronLeft, Home, Inbox, LibraryMusic, Mail, Menu, People, QueueMusic, Recommend } from "@mui/icons-material";
+import { Album, ChevronLeft, Favorite, Home, Inbox, LibraryMusic, Mail, Menu, People, QueueMusic, Recommend } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -47,6 +47,7 @@ const getRoutesByRole = (userRole: string) => {
       return [
         ...defaultRoutes,
         { text: "Playlists", href: "/playlists", icon: <QueueMusic /> },
+        { text: "Favorites", href: "/favorites", icon: <Favorite /> },
         { text: "Albums", href: "/albums", icon: <Album /> },
       ]
     case "artist":

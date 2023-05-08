@@ -6,12 +6,15 @@ import {
   Typography,
   Container,
   Grid,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 
 export interface AuthFormParams {
   email: string;
   password: string;
   username?: string;
+  isArtist?: boolean;
 }
 
 export interface AuthFormProps {
@@ -34,6 +37,7 @@ export const AuthForm = ({
     formState: { errors },
     reset,
     clearErrors,
+    control,
   } = useForm<AuthFormParams>();
 
   return (
@@ -54,7 +58,7 @@ export const AuthForm = ({
           error={Boolean(errors.email)}
           helperText={errors.email?.message}
         />
-        {formAction === 'SignUp' && (
+        {formAction === "SignUp" && (
           <TextField
             margin="normal"
             fullWidth
@@ -80,6 +84,16 @@ export const AuthForm = ({
           error={Boolean(errors.password)}
           helperText={errors.password?.message}
         />
+        {formAction === "SignUp" && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register("isArtist")}
+              />
+            }
+            label="I'm an artist"
+          />
+        )}
         <Button
           type="submit"
           fullWidth

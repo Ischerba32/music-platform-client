@@ -11,6 +11,7 @@ export class UserStore {
   private userName: string;
   private isLoggedIn: boolean = false;
   private role = null;
+  private favoriteTracks: ITrack[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -31,9 +32,16 @@ export class UserStore {
   public get username(): string {
     return this.userName;
   }
+  public get favorites(): ITrack[] {
+    return this.favoriteTracks;
+  }
 
   public set username(username: string) {
     this.userName = username;
+  }
+
+  public set favorites(favorites: ITrack[]) {
+    this.favoriteTracks = favorites;
   }
 
   public set id(id: string) {
@@ -48,6 +56,40 @@ export class UserStore {
     this.role = role;
   }
 
+  isTrackInFav(trackId: string) {
+    return this.favoriteTracks.some(track => track._id === trackId)
+  }
+
+  async removeTrackFromFav(trackId: string) {
+    try {
+      const response = await $api.post('/tracks/remove-from-favs', {
+        userId: this.userId,
+        trackId,
+      })
+      this.favoriteTracks = this.favoriteTracks.filter(track => track._id !== trackId);
+      // this.currentPlaylist.tracks = this.currentPlaylist.tracks.filter(track => track._id !== trackId);
+      // this.currentPlaylist = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async addTrackToFav(trackId: string) {
+    try {
+      const response = await $api.post('/tracks/add-to-favs', {
+        userId: this.userId,
+        trackId,
+      })
+      console.log(response.data);
+
+      this.favoriteTracks.push(response.data);
+      // this.currentPlaylist.tracks = this.currentPlaylist.tracks.filter(track => track._id !== trackId);
+      // this.currentPlaylist = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async signIn(data){
     try {
       const response = await $api.post('/auth/signIn', {
@@ -59,6 +101,7 @@ export class UserStore {
       this.userRole = response.data._doc.role;
       this.isLogged = !!response.data.token;
       this.username = response.data._doc.username;
+      this.favoriteTracks = response.data._doc.favorites;
       return response.data._doc.role;
     } catch(error) {
       console.log(error);
@@ -79,22 +122,28 @@ export class UserStore {
   async logout(){
     localStorage.removeItem('token');
     this.isLogged = false;
+    this.userName = '';
+    this.userRole = null;
+    this.userId = '';
   }
 
   async checkAuth(){
     try {
       const response = await $api.get('/auth/check-auth');
-      console.log(!!response.data.id);
-      this.userId = response.data.id;
-      this.userRole = response.data.role;
+      console.log(!!response.data.user.id);
+      console.log(response.data);
+      this.userId = response.data.user.id;
+      this.userRole = response.data.user.role;
       this.isLogged = true;
-      this.username = response.data.username;
+      this.username = response.data.user.username;
+      this.favoriteTracks = response.data.favorites;
       // if (!isAuthorized) {
       //   this.isLogged = false;
       //   return false;
       // }
       return true;
     } catch (error) {
+      console.log(error);
       return false;
     }
   }
@@ -342,6 +391,12 @@ export class TracksStore {
 
   public set error(error: string) {
     this.errorMessage = error;
+  }
+
+  getNextTrackIndex(trackId: string) {
+    const currentTrackIndex = this.musicTracks.findIndex(track => track._id === trackId);
+    const nextTrackIndex = this.musicTracks[currentTrackIndex + 1] ? currentTrackIndex + 1 : 0;
+    return nextTrackIndex;
   }
 
   async fetchTracks(): Promise<any> {

@@ -4,6 +4,13 @@ import { wrapper } from "../store";
 import { StoreContext } from "../context/storeContext";
 import { userStore, playerStore, tracksStore, albumsStore, playlistsStore } from "../store/store";
 import { Provider } from "mobx-react";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark'
+  }
+})
 
 const WrappedApp: FC<AppProps> = ({ Component, pageProps }) => (
   <Provider
@@ -13,7 +20,10 @@ const WrappedApp: FC<AppProps> = ({ Component, pageProps }) => (
     albumsStore={albumsStore}
     playlistsStore={playlistsStore}
   >
-    <Component {...pageProps} />
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ThemeProvider>
   </Provider>
 );
 

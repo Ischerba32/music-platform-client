@@ -32,8 +32,8 @@ const TrackPage = ({ serverTrack }) => {
 
   return (
     <MainLayout
-      title={"Музыкальная площадка - " + track.name + " - " + track.artist}
-      keywords={"Музыка, артисты, " + track.name + ", " + track.artist}
+      title={"Музыкальная площадка - " + track.name + " - " + track.artist.username}
+      keywords={"Музыка, артисты, " + track.name + ", " + track.artist.username}
     >
       <Button
         variant={"outlined"}
@@ -51,7 +51,7 @@ const TrackPage = ({ serverTrack }) => {
         />
         <div style={{ marginLeft: 30 }}>
           <h1>Название трека - {track.name}</h1>
-          <h1>Исполнитель - {track.artist}</h1>
+          <h1>Исполнитель - {track.artist.username}</h1>
           <h1>Прослушиваний - {track.listens}</h1>
         </div>
       </Grid>

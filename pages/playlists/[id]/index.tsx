@@ -1,22 +1,22 @@
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import MainLayout from "../../../layouts/MainLayout";
 import { Box, Button, Card, Grid } from "@mui/material";
 import TrackList from "../../../components/TrackList";
 import { observer } from "mobx-react";
-import { playlistsStore } from "../../../store/store";
+import { playlistsStore, tracksStore } from "../../../store/store";
 import { IPlaylist } from "../../../types/playlist";
 
 const PlaylistPage = ({ serverPlaylist }) => {
   const [currentPlaylist, setCurrentPlaylist] = useState<IPlaylist>(serverPlaylist);
   const router = useRouter();
-  // console.log(serverPlaylist);
+  console.log(serverPlaylist);
 
-  // useLayoutEffect(() => {
-  //   playlistsStore.currentPlaylist = serverPlaylist;
-  // }, []);
+  useEffect(() => {
+    tracksStore.tracks = serverPlaylist.tracks;
+  }, [serverPlaylist])
 
   const handleDeleteTrackFromPlaylist = async (trackId: string) => {
     await playlistsStore.removeTrackFromPlaylist(currentPlaylist._id, trackId);

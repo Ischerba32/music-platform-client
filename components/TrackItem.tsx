@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ITrack } from "../types/track";
 // import {Card, Grid, IconButton} from "@material-ui/core";
 import styles from "../styles/TrackItem.module.scss";
@@ -8,7 +8,7 @@ import { useActions } from "../hooks/useActions";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import formatTrackTime from "../utils/formatTime";
 import { Card, Grid, IconButton } from "@mui/material";
-import { Delete, Pause, PlayArrow } from "@mui/icons-material";
+import { Delete, Favorite, FavoriteBorder, Pause, PlayArrow } from "@mui/icons-material";
 import { playerStore, userStore } from "../store/store";
 import Image from "next/image";
 import { observer } from "mobx-react";
@@ -20,9 +20,15 @@ interface TrackItemProps {
 }
 
 const TrackItem = ({ track, active = false, onDelete }) => {
+  const [isTrackInFav, setIsTrackInFav] = useState(false)
   const router = useRouter();
   // const {playTrack, pauseTrack, setActiveTrack} = useActions()
   // const { currentTime, pause } = useTypedSelector(state => state.player)
+
+  useEffect(() => {
+    const inFav = userStore.isTrackInFav(track._id)
+    setIsTrackInFav(inFav)
+  }, [userStore.favorites])
 
   const play = (e, trackId) => {
     e.stopPropagation();
@@ -47,6 +53,18 @@ const TrackItem = ({ track, active = false, onDelete }) => {
     onDelete(track._id)
   }
 
+  const handleTrackInFav = async (e) => {
+    e.stopPropagation();
+    if (isTrackInFav) {
+      await userStore.removeTrackFromFav(track._id)
+      setIsTrackInFav(false);
+    } else {
+      await userStore.addTrackToFav(track._id)
+      setIsTrackInFav(true);
+    }
+
+  }
+
   return (
     <Card
       className={styles.track}
@@ -69,7 +87,7 @@ const TrackItem = ({ track, active = false, onDelete }) => {
         style={{ width: 200, margin: "0 20px" }}
       >
         <div>{track.name}</div>
-        <div style={{ fontSize: 12, color: "gray" }}>{track.artist.username}</div>
+        <div style={{ fontSize: 12, color: "gray" }}>{track.artist?.username}</div>
       </Grid>
       {active ? (
         <div>
@@ -86,6 +104,15 @@ const TrackItem = ({ track, active = false, onDelete }) => {
         >
           <Delete />
         </IconButton>
+      )}
+      {userStore.userRole === 'user' && (
+        <IconButton
+          onClick={handleTrackInFav}
+          style={{ marginLeft: "auto" }}
+        >
+          {isTrackInFav ? <Favorite/> : <FavoriteBorder/>}
+        {/* <FavoriteBorder /> */}
+      </IconButton>
       )}
     </Card>
   );
