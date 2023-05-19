@@ -4,7 +4,7 @@ import React from 'react'
 import { recommendsStore } from '../store/store'
 import RecommendItem from './RecommendItem'
 
-const Recommends = ({ recommends }) => {
+const Recommends = () => {
   return (
     <Grid container direction="column">
       <Box p={2}>

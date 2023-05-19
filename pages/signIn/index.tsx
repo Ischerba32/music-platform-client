@@ -19,9 +19,6 @@ const SignIn = () => {
     userStore.checkAuth().then(response => response && router.push('/'));
   }, [router])
 
-  // const { tracksStore } = useContext(StoreContext);
-
-
   return (
     <AuthForm
       onSubmit={handleSignIn}

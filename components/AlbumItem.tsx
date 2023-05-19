@@ -45,7 +45,7 @@ const AlbumItem = ({ album }) => {
         <div>{album.name}</div>
         <div style={{ fontSize: 12, color: "gray" }}>{album.artist.username}</div>
       </Grid>
-      {userStore.userRole === 'artist' && (
+      {userStore.userRole !== 'user' && (
         <IconButton
           onClick={handleDeleteAlbum}
           style={{ marginLeft: "auto" }}

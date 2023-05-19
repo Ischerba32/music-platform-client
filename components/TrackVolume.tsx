@@ -1,25 +1,32 @@
-import React from 'react';
+import { Stack, Slider } from "@mui/material";
+import React from "react";
 
 interface TrackVolumeProps {
-    left: number;
-    right: number;
-    onChange: (e) => void;
+  left: number;
+  right: number;
+  onChange: (e) => void;
 }
 
-const TrackVolume: React.FC<TrackVolumeProps> = ({left, right, onChange}) => {
-    return (
-        <div style={{display: 'flex'}}>
-            <input
-                type="range"
-                min={0}
-                max={right}
-                value={left}
-                onChange={onChange}
-            />
+const TrackVolume: React.FC<TrackVolumeProps> = ({ left, right, onChange }) => {
+  return (
+    <Stack
+    //   spacing={4}
+      direction="row"
+      alignItems="center"
+      width="10%"
+    >
+      <Slider
+        min={0}
+        max={right}
+        value={left}
+        onChange={onChange}
+        size="small"
+      />
+      <span>
+        {right}
+      </span>
+    </Stack>
+  );
+};
 
-            <div>{left} / {right}</div>
-        </div>
-    );
-}
-
-export default TrackVolume
+export default TrackVolume;

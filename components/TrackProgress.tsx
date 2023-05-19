@@ -14,7 +14,7 @@ const TrackProgress: React.FC<TrackProgressProps> = ({
   onChange,
 }) => {
   return (
-    <Stack spacing={4} direction="row" sx={{ mb: 1 }} alignItems="center" width='15%'>
+    <Stack spacing={4} direction="row" alignItems="center" width='15%'>
       <span>{formatTrackTime(left)}</span>
       <Slider
         min={0}

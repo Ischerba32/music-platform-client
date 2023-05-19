@@ -47,10 +47,10 @@ const Index = ({ tracks, errorStatus }) => {
         <Card style={{ width: 900 }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
-              <h1>Список треков</h1>
-              <Button onClick={() => router.push("/admin/tracks/create")}>
-                Загрузить
-              </Button>
+              <h1>Tracks</h1>
+              {/* <Button onClick={() => router.push("/admin/tracks/create")}>
+                Upload
+              </Button> */}
             </Grid>
           </Box>
           <TrackList

@@ -5,7 +5,7 @@ import clsx from "clsx";
 import styles from "../styles/Player.module.scss";
 import TrackProgress from "./TrackProgress";
 import TrackVolume from "./TrackVolume";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Box, Button, Card, Grid, IconButton } from "@mui/material";
 import {
   Pause,
   PlayArrow,
@@ -29,7 +29,6 @@ const Player = () => {
     if (!audio) {
       audio = new Audio();
     } else {
-      playerStore.currentTime = 0;
       setAudio();
     }
   }, [playerStore.active]);
@@ -72,19 +71,19 @@ const Player = () => {
   };
 
   return (
-    <div
+    <Card
       className={clsx({
         [styles.player]: true,
         [styles.player_collapsed]: playerStore.collapsed,
       })}
     >
-      <Button
+      {/* <Button
         className={styles["collapse-btn"]}
         variant="contained"
         onClick={() => (playerStore.collapsed = !playerStore.collapsed)}
       >
         {playerStore.collapsed ? <ExpandLess /> : <ExpandMore />}
-      </Button>
+      </Button> */}
 
       <IconButton
         onClick={() =>
@@ -120,7 +119,7 @@ const Player = () => {
         right={100}
         onChange={changeVolume}
       />
-    </div>
+    </Card>
   );
 };
 

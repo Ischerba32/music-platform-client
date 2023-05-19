@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
 import Image from 'next/image';
 import React from 'react'
-import { recommendsStore } from '../store/store';
+import { recommendsStore, userStore } from '../store/store';
 import styles from '../styles/TrackItem.module.scss'
 import { Box, Card, Grid, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
@@ -11,7 +11,7 @@ const RecommendItem = ({ recommend }) => {
   const router = useRouter();
 
   const handleClickRecommend = () => {
-    router.push('/admin/recommends/' + recommend._id)
+    router.push('/recommends/' + recommend._id)
   }
 
   const handleDeleteRecommend = async (e) => {
@@ -30,9 +30,11 @@ const RecommendItem = ({ recommend }) => {
       <div>{recommend.name}</div>
       {/* <div style={{fontSize: 12, color: 'gray'}}>{album.artist}</div> */}
     </Grid>
-    <IconButton onClick={handleDeleteRecommend} style={{marginLeft: 'auto'}}>
-      <Delete/>
-    </IconButton>
+    {userStore.userRole === 'admin' && (
+      <IconButton onClick={handleDeleteRecommend} style={{marginLeft: 'auto'}}>
+        <Delete/>
+      </IconButton>
+    )}
     </Card>
   )
 }

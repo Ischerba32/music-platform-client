@@ -20,7 +20,7 @@ const TrackPage = ({ serverTrack }) => {
   const addComment = async () => {
     try {
       const response = await $api.post("/tracks/comment", {
-        username: username.value,
+        username: userStore.username,
         text: text.value,
         trackId: track._id,
       });
@@ -40,7 +40,7 @@ const TrackPage = ({ serverTrack }) => {
         style={{ fontSize: 18 }}
         onClick={() => router.back()}
       >
-        Назад
+        Back
       </Button>
       <Grid container style={{ margin: "20px 0" }}>
         <Image
@@ -50,26 +50,28 @@ const TrackPage = ({ serverTrack }) => {
           alt="tee"
         />
         <div style={{ marginLeft: 30 }}>
-          <h1>Название трека - {track.name}</h1>
-          <h1>Исполнитель - {track.artist.username}</h1>
-          <h1>Прослушиваний - {track.listens}</h1>
+          <h1>{track.artist.username} - {track.name}</h1>
         </div>
       </Grid>
-      <h1>Слова в треке</h1>
-      <p>{track.text}</p>
-      <h1>Комментарии</h1>
+      {track.text && (
+        <>
+          <h1>Lyrics</h1>
+          <p>{track.text}</p>
+        </>
+      )}
+      <h1>Comments</h1>
       {userStore.userRole !== 'admin' && (
         <Grid container>
-            <TextField label="Ваше имя" fullWidth {...username} />
-            <TextField label="Комментарий" {...text} fullWidth multiline rows={4} />
-            <Button onClick={addComment}>Отправить</Button>
+          {/* <TextField label="Ваше имя"  {...username} /> */}
+          <TextField label="Comment" {...text} multiline rows={4} />
+          <Button onClick={addComment}>Send</Button>
         </Grid>
       )}
       <div>
         {track.comments.map((comment) => (
           <div key={comment._id}>
-            <div>Автор - {comment.username}</div>
-            <div>Комментарий - {comment.text}</div>
+            <div>User - {comment.username}</div>
+            <div>{comment.text}</div>
           </div>
         ))}
       </div>
