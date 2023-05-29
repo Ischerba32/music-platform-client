@@ -10,6 +10,7 @@ import {
   Checkbox,
   Box,
 } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
 
 export interface AuthFormParams {
   email: string;
@@ -24,6 +25,8 @@ export interface AuthFormProps {
   actionLink?: string;
   actionTitle?: string;
   successMsg?: string;
+  error?: string;
+  setError: Dispatch<SetStateAction<string>>;
 }
 
 export const AuthForm = ({
@@ -31,6 +34,8 @@ export const AuthForm = ({
   formAction,
   actionLink,
   actionTitle,
+  error,
+  setError
 }: AuthFormProps) => {
   const {
     register,
@@ -40,6 +45,10 @@ export const AuthForm = ({
     clearErrors,
     control,
   } = useForm<AuthFormParams>();
+
+  const handleFocusInput = () => {
+    setError('');
+  }
 
   return (
     <Container component="main" maxWidth="xs" style={{height: '100vh', display: "flex", alignItems: "center"}}>
@@ -59,6 +68,7 @@ export const AuthForm = ({
             })}
             error={Boolean(errors.email)}
             helperText={errors.email?.message}
+            onFocus={handleFocusInput}
           />
           {formAction === "SignUp" && (
             <TextField
@@ -72,6 +82,7 @@ export const AuthForm = ({
               })}
               error={Boolean(errors.username)}
               helperText={errors.username?.message}
+              onFocus={handleFocusInput}
             />
           )}
           <TextField
@@ -85,6 +96,7 @@ export const AuthForm = ({
             })}
             error={Boolean(errors.password)}
             helperText={errors.password?.message}
+            onFocus={handleFocusInput}
           />
           {formAction === "SignUp" && (
             <FormControlLabel
@@ -109,12 +121,17 @@ export const AuthForm = ({
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href={actionLink}>
-                  <p onClick={() => reset()}>{actionTitle}</p>
+                  <p onClick={() => reset()} style={{cursor: "pointer"}}>{actionTitle}</p>
                 </Link>
               </Grid>
             </Grid>
           )}
         </form>
+        {error && (
+          <Typography style={{color: '#c54040'}} align="center">
+          {error}
+        </Typography>
+        )}
       </Box>
     </Container>
   );

@@ -21,7 +21,7 @@ const UserItem = ({user}) => {
         src={"http://localhost:5000/" + playlist.picture}
         alt={playlist.name}
       /> */}
-      <Box width={70} height={70}>
+      <Box width={70} height={70} display="flex" justifyContent="center" alignItems="center">
         <Person />
       </Box>
       <Grid

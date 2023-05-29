@@ -12,7 +12,7 @@ interface SetAudioProps {
 const SetAudio: React.FC<SetAudioProps> = ({setAudio}) => {
     return (
         <FileUpload setFile={setAudio} accept="audio/*">
-            <Button>Загрузить аудио</Button>
+            <Button style={{margin: 'auto'}}>Upload audio</Button>
         </FileUpload>
     )
 }

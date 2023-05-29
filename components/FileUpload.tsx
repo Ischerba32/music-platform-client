@@ -13,7 +13,7 @@ const FileUpload: React.FC<PropsWithChildren<FileUploadProps>> = ({setFile, acce
     }
 
     return (
-        <div onClick={() => ref.current.click()}>
+        <div onClick={() => ref.current.click()} style={{display: 'flex'}}>
             <input
                 type="file"
                 accept={accept}

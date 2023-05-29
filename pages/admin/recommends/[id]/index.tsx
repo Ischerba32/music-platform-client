@@ -37,7 +37,7 @@ const RecommendPage = ({ serverRecommend }) => {
                   router.push(`/admin/recommends/${serverRecommend._id}/tracks/add`)
                 }
               >
-                Добавить треки
+                Add
               </Button>
             </Grid>
           </Box>

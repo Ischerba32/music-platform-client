@@ -20,7 +20,7 @@ const SetPicture: React.FC<SetPictureProps> = ({picture, setPicture}) => {
         <FileUpload setFile={setPicture} accept="image/*">
             {picture && <img className={styles['cover-image']} src={URL.createObjectURL(picture)} />}
 
-            <Button>Загрузить изображение</Button>
+            <Button style={{margin: 'auto'}}>Upload image</Button>
         </FileUpload>
     )
 }

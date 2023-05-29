@@ -23,7 +23,7 @@ const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
             <Grid container justifyContent="space-between">
               <h1>{`${serverAlbum.artist} - ${serverAlbum.name}`}</h1>
               <Button onClick={() => router.push(`/artist/albums/${serverAlbum._id}/track/add`)}>
-                Добавить трек
+                Add track
               </Button>
             </Grid>
           </Box>

@@ -42,7 +42,7 @@ const PlaylistPage = ({ serverPlaylist }) => {
                   router.push(`/playlists/${serverPlaylist._id}/tracks/add`)
                 }
               >
-                Добавить треки
+                Add
               </Button>
             </Grid>
           </Box>

@@ -25,7 +25,7 @@ const StepWrapper: React.FC<PropsWithChildren<StepWrapperProps>> = ({
       <Grid
         container
         justifyContent="center"
-        style={{ margin: "70px 0 ", height: 270 }}
+        style={{ margin: "70px 0" }}
       >
         <Card style={{ width: 600 }}>{children}</Card>
       </Grid>

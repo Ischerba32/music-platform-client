@@ -32,7 +32,7 @@ const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
               <h1>{`${serverAlbum.artist.username} - ${serverAlbum.name}`}</h1>
               {userStore.userRole === 'artist' && (
                 <Button onClick={() => router.push(`/artist/albums/${serverAlbum._id}/track/add`)}>
-                  Добавить трек
+                  Add track
                 </Button>
               )}
             </Grid>

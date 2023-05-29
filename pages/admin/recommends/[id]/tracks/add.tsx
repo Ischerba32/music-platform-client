@@ -35,7 +35,7 @@ const AddPage = ({recommendId}) => {
         <Card style={{ width: 900 }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
-              <h1>Добавить треки</h1>
+              <h1>Add</h1>
               <h4>added: {addedCount}</h4>
             </Grid>
           </Box>

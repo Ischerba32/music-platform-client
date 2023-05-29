@@ -5,11 +5,12 @@ import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import axios from "axios";
 import { useInput } from "../../hooks/useInput";
-import { Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Card, Grid, TextField, Typography } from "@mui/material";
 import $api from "../../config/axios";
 import Image from "next/image";
 import { userStore } from "../../store/store";
 import { observer } from "mobx-react";
+import { Person } from "@mui/icons-material";
 
 const TrackPage = ({ serverTrack }) => {
   const [track, setTrack] = useState<ITrack>(serverTrack);
@@ -67,12 +68,31 @@ const TrackPage = ({ serverTrack }) => {
           <Button onClick={addComment}>Send</Button>
         </Grid>
       )}
-      <div>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+        marginTop: '20px'
+        }}>
         {track.comments.map((comment) => (
-          <div key={comment._id}>
-            <div>User - {comment.username}</div>
-            <div>{comment.text}</div>
-          </div>
+          // <div key={comment._id}>
+          //   <div>{comment.username}</div>
+          //   <div>{comment.text}</div>
+          // </div>
+          <Card key={comment._id} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: 15,
+            width: 'fit-content',
+          }}>
+            <Box display='flex' alignItems="center" gap={'10px'}>
+              <Box width={30} height={30} display="flex" justifyContent="center" alignItems="center">
+                <Person />
+              </Box>
+              <Typography>{comment.username}</Typography>
+            </Box>
+            <Typography marginLeft={'40px'}>{comment.text}</Typography>
+          </Card>
         ))}
       </div>
     </MainLayout>

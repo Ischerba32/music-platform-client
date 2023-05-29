@@ -104,8 +104,7 @@ export class UserStore {
       this.favoriteTracks = response.data._doc.favorites;
       return response.data._doc.role;
     } catch(error) {
-      console.log(error);
-
+      throw new Error(error.response.data.message);
     }
   }
   async signUp(data){
@@ -115,7 +114,7 @@ export class UserStore {
       })
       console.log(response);
     } catch (error) {
-      console.log(error);
+      throw new Error(error.response.data.message);
     }
   }
 

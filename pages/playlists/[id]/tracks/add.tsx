@@ -31,8 +31,8 @@ const AddPage = ({playlistId}) => {
 
   return (
     <MainLayout>
-      <Grid container justifyContent="center">
-        <Card style={{ width: 900 }}>
+      <Grid container justifyContent="center" flexDirection="column">
+        <Card style={{ width: 900, margin: 'auto' }}>
           <Box p={3}>
             <Grid container justifyContent="space-between">
               <h1>Add Tracks</h1>
@@ -65,9 +65,10 @@ const AddPage = ({playlistId}) => {
             </Card>
           </Box>
           ))}
-          {/* <TrackList tracks={tracksStore.musicTracks} /> */}
         </Card>
-        <Button onClick={() => router.push(`/playlists/${playlistId}`)}>Done</Button>
+        <Button
+          sx={{mt: 2}}
+          onClick={() => router.push(`/playlists/${playlistId}`)}>Done</Button>
       </Grid>
     </MainLayout>
   )

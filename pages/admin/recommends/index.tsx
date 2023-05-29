@@ -32,7 +32,7 @@ const RecommendsPage = ({ recommends, errorStatus }) => {
             <Grid container justifyContent="space-between">
               <h1>Recommends</h1>
               <Button onClick={() => router.push("/admin/recommends/create")}>
-                Создать
+                Create
               </Button>
             </Grid>
           </Box>

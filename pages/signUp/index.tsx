@@ -1,13 +1,19 @@
 import { useRouter } from "next/router";
 import { AuthForm, AuthFormParams } from "../../components/AuthForm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { userStore } from "../../store/store";
 
 const SignUp = () => {
+  const [error, setError] = useState('');
   const router = useRouter();
+
   const handleSignUp = async (data: AuthFormParams) => {
-  await userStore.signUp(data);
-  router.push('/signIn');
+    try {
+      await userStore.signUp(data);
+      router.push('/signIn');
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   useEffect(() => {
@@ -20,6 +26,8 @@ const SignUp = () => {
       formAction='SignUp'
       actionLink='/signIn'
       actionTitle='SignIn'
+      error={error}
+      setError={setError}
     />
   )
 };

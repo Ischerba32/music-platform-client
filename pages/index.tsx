@@ -10,14 +10,21 @@ import axios from "axios";
 import { Box, Card, Grid } from "@mui/material";
 import Recommends from "../components/Recommends";
 
-const Index = ({recommends}) => {
+const Index = ({recommends, errorStatus}) => {
   const router = useRouter();
+
+  useEffect(() => {
+    if (errorStatus) {
+      router.push('/signIn')
+    }
+  }, [errorStatus, router])
 
   useEffect(() => {
     recommendsStore.recommends = recommends;
   }, [recommends])
 
   console.log(recommends)
+
 
   return (
     <>
@@ -44,15 +51,23 @@ export default observer(Index);
 
 export const getServerSideProps: GetServerSideProps = async ({params, req}) => {
   const token = req.cookies['token'];
-  const response = await axios.get('http://localhost:5000/recommends/', {
-    headers: {
-        'authorization': `Bearer ${token}`
-    },
-    withCredentials: true
-    })
-  return {
-    props: {
-        recommends: response.data
+  try {
+    const response = await axios.get('http://localhost:5000/recommends/', {
+      headers: {
+          'authorization': `Bearer ${token}`
+      },
+      withCredentials: true
+      })
+    return {
+      props: {
+          recommends: response.data
+      }
+    }
+  } catch (error) {
+    return {
+      props: {
+        errorStatus: error.response.status
+      }
     }
   }
 }

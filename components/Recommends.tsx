@@ -8,7 +8,7 @@ const Recommends = () => {
   return (
     <Grid container direction="column">
       <Box p={2}>
-        {recommendsStore.recommends.map((recommend) => (
+        {recommendsStore.recommends?.map((recommend) => (
           <RecommendItem
             key={recommend._id}
             recommend={recommend}

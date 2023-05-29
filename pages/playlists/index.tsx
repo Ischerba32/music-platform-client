@@ -35,7 +35,7 @@ const PlaylistsPage = ({ playlists, errorStatus }) => {
             <Grid container justifyContent="space-between">
               <h1>Playlists</h1>
               <Button onClick={() => router.push("/playlists/create")}>
-                Создать
+                Create
               </Button>
             </Grid>
           </Box>
