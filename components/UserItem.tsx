@@ -1,5 +1,5 @@
 import React from 'react'
-import { usersStore } from '../store/store';
+import { userStore, usersStore } from '../store/store';
 import styles from '../styles/TrackItem.module.scss'
 import { Box, Card, Grid, Icon, IconButton } from '@mui/material';
 import { Delete, Person } from '@mui/icons-material';
@@ -15,12 +15,6 @@ const UserItem = ({user}) => {
 
   return (
     <Card className={styles.track}>
-      {/* <Image
-        width={70}
-        height={70}
-        src={"http://localhost:5000/" + playlist.picture}
-        alt={playlist.name}
-      /> */}
       <Box width={70} height={70} display="flex" justifyContent="center" alignItems="center">
         <Person />
       </Box>
@@ -30,11 +24,12 @@ const UserItem = ({user}) => {
         style={{ width: 200, margin: "0 20px" }}
       >
         <div>{user.username} - {user.email}</div>
-        {/* <div style={{fontSize: 12, color: 'gray'}}>{album.artist}</div> */}
       </Grid>
-      <IconButton onClick={handleDeleteUser} style={{ marginLeft: "auto" }}>
-        <Delete />
-      </IconButton>
+      {userStore.id !== user._id && (
+        <IconButton onClick={handleDeleteUser} style={{ marginLeft: "auto" }}>
+          <Delete />
+        </IconButton>
+      )}
     </Card>
   )
 }

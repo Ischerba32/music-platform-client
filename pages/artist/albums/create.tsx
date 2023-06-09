@@ -28,7 +28,7 @@ const Create = () => {
       $api
         .post("http://localhost:5000/albums", formData)
         .catch((e) => console.log(e))
-        .finally(() => router.push("/albums"));
+        .finally(() => router.push("/artist/albums"));
     }
   };
 

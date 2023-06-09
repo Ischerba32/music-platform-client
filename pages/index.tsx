@@ -33,14 +33,16 @@ const Index = ({recommends, errorStatus}) => {
         <Box p={3}>
           <h1>Welcome back! {userStore.username}</h1>
         </Box>
-        <Card style={{ width: 900 }}>
-          <Box p={3}>
-            <Grid container justifyContent="space-between">
-              <h2>Special for you</h2>
-            </Grid>
-          </Box>
-          <Recommends />
-        </Card>
+        {recommendsStore.recommends?.length !== 0 && (
+          <Card style={{ width: 900 }}>
+            <Box p={3}>
+              <Grid container justifyContent="space-between">
+                <h2>Special for you</h2>
+              </Grid>
+            </Box>
+            <Recommends />
+          </Card>
+        )}
       </Grid>
       </MainLayout>
     </>

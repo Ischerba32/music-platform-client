@@ -6,7 +6,7 @@ interface StepWrapperProps {
   activeStep: number;
   steps?: number;
 }
-const STEPSINFO = ["Tracks info", "Cover", "Track"];
+const STEPSINFO = ["Information", "Cover", "Track"];
 
 const StepWrapper: React.FC<PropsWithChildren<StepWrapperProps>> = ({
   activeStep,

@@ -134,7 +134,9 @@ export class UserStore {
       this.userId = response.data.user.id;
       this.userRole = response.data.user.role;
       this.isLogged = true;
-      this.username = response.data.user.username;
+      this.userName = response.data.user.username;
+      console.log(this.userName);
+
       this.favoriteTracks = response.data.favorites;
       // if (!isAuthorized) {
       //   this.isLogged = false;
@@ -216,6 +218,16 @@ export class AlbumsStore {
     }
   }
 
+  async searchAlbums(query: string) {
+    try {
+      const {data} = await $api.get(`/albums/search?query=${query}`);
+      this.albums = data;
+      return data
+    } catch (error) {
+      this.error = error;
+    }
+  }
+
   async removeAlbum(albumId: string) {
     try {
       await $api.delete('/albums/' + albumId)
@@ -250,10 +262,6 @@ export class PlaylistsStore {
     this.userPlaylists = playlists;
   }
 
-  // public set currentPlaylist(playlist) {
-  //   this.playlist = playlist;
-  // }
-
   public set error(error: string) {
     this.errorMessage = error;
   }
@@ -261,6 +269,16 @@ export class PlaylistsStore {
   async fetchPlaylists() {
     try {
       const {data} = await $api.get('/playlists');
+      this.playlists = data;
+      return data
+    } catch (error) {
+      this.error = error;
+    }
+  }
+
+  async searchPlaylists(query: string) {
+    try {
+      const {data} = await $api.get(`/playlists/search?query=${query}`);
       this.playlists = data;
       return data
     } catch (error) {
@@ -394,7 +412,11 @@ export class TracksStore {
 
   getNextTrackIndex(trackId: string) {
     const currentTrackIndex = this.musicTracks.findIndex(track => track._id === trackId);
+    console.log(currentTrackIndex);
+
     const nextTrackIndex = this.musicTracks[currentTrackIndex + 1] ? currentTrackIndex + 1 : 0;
+    console.log(nextTrackIndex);
+
     return nextTrackIndex;
   }
 
@@ -463,6 +485,7 @@ export class PlayerStore {
 
   public set active(activeTrack: ITrack) {
     this.activeTrack = activeTrack;
+    this.currentPlayerTime = 0;
   }
 
   public set volume(value: number) {

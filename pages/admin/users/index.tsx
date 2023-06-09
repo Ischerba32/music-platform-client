@@ -1,11 +1,7 @@
 import { useRouter } from "next/router";
-import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import MainLayout from "../../../layouts/MainLayout";
-import { Box, Button, Card, Grid } from "@mui/material";
-import { NextThunkDispatch, wrapper } from "../../../store";
-import { fetchAlbums } from "../../../store/actions-creators/album";
-import Albums from "../../../components/Albums";
-import { albumsStore, userStore } from "../../../store/store";
+import { Box, Card, Grid } from "@mui/material";
+import { userStore } from "../../../store/store";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
@@ -20,7 +16,7 @@ const Index = ({ users, errorStatus }) => {
   // const { albums, error } = useTypedSelector((state) => state.album);
 
   useEffect(() => {
-   usersStore.users = users;
+    usersStore.users = users;
   }, [users]);
 
   // console.log('albums: ', albums);

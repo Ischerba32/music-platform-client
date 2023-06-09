@@ -24,7 +24,7 @@ const AlbumPage: FC<AlbumPageProps> = ({serverAlbum}) => {
   }, [serverAlbum])
 
   return (
-    <MainLayout title={`${serverAlbum.artist} - ${serverAlbum.name}`}>
+    <MainLayout title={`${serverAlbum.artist.username} - ${serverAlbum.name}`}>
       <Grid container justifyContent="center">
         <Card style={{ width: 900 }}>
           <Box p={3}>

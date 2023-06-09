@@ -2,6 +2,7 @@ export interface IComment {
     _id: string;
     username: string;
     text: string
+    createdAt: string;
 }
 
 export interface ITrack {

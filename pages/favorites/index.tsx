@@ -1,5 +1,5 @@
-import React from "react";
-import { userStore } from "../../store/store";
+import React, { useEffect } from "react";
+import { tracksStore, userStore } from "../../store/store";
 import MainLayout from "../../layouts/MainLayout";
 import { Grid, Card, Box, Button } from "@mui/material";
 import TrackList from "../../components/TrackList";
@@ -7,6 +7,10 @@ import { observer } from "mobx-react";
 
 const FavoritesPage = () => {
   console.log(userStore.favorites);
+
+  useEffect(() => {
+    tracksStore.tracks = userStore.favorites;
+  }, [])
 
   return (
     <MainLayout title={`Любимые треки`}>

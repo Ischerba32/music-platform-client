@@ -24,6 +24,7 @@ const TrackPage = ({ serverTrack }) => {
         username: userStore.username,
         text: text.value,
         trackId: track._id,
+        createdAt: new Date(),
       });
       setTrack({ ...track, comments: [...track.comments, response.data] });
     } catch (e) {
@@ -31,9 +32,21 @@ const TrackPage = ({ serverTrack }) => {
     }
   };
 
+  const formatDate = (dateString: string): string => {
+    const currentDate = new Date(dateString);
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+    const date = currentDate.getDate().toString().padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${date}`;
+    return formattedDate;
+  }
+
   return (
     <MainLayout
-      title={"Музыкальная площадка - " + track.name + " - " + track.artist.username}
+      title={
+        "Музыкальная площадка - " + track.name + " - " + track.artist.username
+      }
       keywords={"Музыка, артисты, " + track.name + ", " + track.artist.username}
     >
       <Button
@@ -51,7 +64,9 @@ const TrackPage = ({ serverTrack }) => {
           alt="tee"
         />
         <div style={{ marginLeft: 30 }}>
-          <h1>{track.artist.username} - {track.name}</h1>
+          <h1>
+            {track.artist.username} - {track.name}
+          </h1>
         </div>
       </Grid>
       {track.text && (
@@ -61,37 +76,49 @@ const TrackPage = ({ serverTrack }) => {
         </>
       )}
       <h1>Comments</h1>
-      {userStore.userRole !== 'admin' && (
+      {userStore.userRole !== "admin" && (
         <Grid container>
           {/* <TextField label="Ваше имя"  {...username} /> */}
           <TextField label="Comment" {...text} multiline rows={4} />
           <Button onClick={addComment}>Send</Button>
         </Grid>
       )}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '15px',
-        marginTop: '20px'
-        }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+          marginTop: "20px",
+        }}
+      >
         {track.comments.map((comment) => (
           // <div key={comment._id}>
           //   <div>{comment.username}</div>
           //   <div>{comment.text}</div>
           // </div>
-          <Card key={comment._id} style={{
-            display: 'flex',
-            flexDirection: 'column',
-            padding: 15,
-            width: 'fit-content',
-          }}>
-            <Box display='flex' alignItems="center" gap={'10px'}>
-              <Box width={30} height={30} display="flex" justifyContent="center" alignItems="center">
+          <Card
+            key={comment._id}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              padding: 15,
+              width: "fit-content",
+            }}
+          >
+            <Box display="flex" alignItems="center" gap={"10px"}>
+              <Box
+                width={30}
+                height={30}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Person />
               </Box>
               <Typography>{comment.username}</Typography>
+              <Typography variant="caption" style={{color: "#93918e"}}>{formatDate(comment.createdAt)}</Typography>
             </Box>
-            <Typography marginLeft={'40px'}>{comment.text}</Typography>
+            <Typography marginLeft={"40px"} variant="subtitle2">{comment.text}</Typography>
           </Card>
         ))}
       </div>

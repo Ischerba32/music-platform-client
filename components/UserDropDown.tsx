@@ -1,9 +1,5 @@
 import React from "react";
 import {
-  Avatar,
-  Button,
-  ClickAwayListener,
-  Grow,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -15,7 +11,7 @@ import {
 } from "@mui/material";
 import { AccountCircle, ExitToApp } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { userStore } from "../store/store";
+import { playerStore, userStore } from "../store/store";
 import { observer } from "mobx-react";
 
 const UserDropDown = () => {
@@ -31,6 +27,8 @@ const UserDropDown = () => {
   };
 
   const handleLogout = async () => {
+    playerStore.active = null;
+    playerStore.collapsed = false;
     await userStore.logout();
     router.push('/signIn');
   }
@@ -41,7 +39,7 @@ const UserDropDown = () => {
 
   return (
     <div>
-      <span>{userStore.username}</span>
+      <span>{username}</span>
       <IconButton
         size="large"
         aria-label="account of current user"
@@ -67,7 +65,7 @@ const UserDropDown = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>

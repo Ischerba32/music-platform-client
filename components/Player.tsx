@@ -43,6 +43,7 @@ const Player = () => {
 
   const setAudio = () => {
     if (playerStore.active) {
+
       audio.pause();
       audio.src = "http://localhost:5000/" + playerStore.active.audio;
       audio.volume = playerStore.volume / 100;
